@@ -1,6 +1,7 @@
 package gui;
 
 import config.SessionManager;
+import gui.component.global.Header;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,7 +22,7 @@ public class Index extends JFrame {
         JPanel rightTextPanel = new JPanel();
 
         //헤더 패널 생성
-        JPanel headerPanel = new JPanel();
+        Header headerPanel = new Header();
 
         //푸터 패널 생성
         JPanel footerPanel = new JPanel();
@@ -39,9 +40,9 @@ public class Index extends JFrame {
         leftImagePanel.add(mainLb);
 
         //메인 로고 라벨 만들기
-        ImageIcon titleImage = new ImageIcon(getClass().getClassLoader().getResource("img/logo.png"));
+        ImageIcon titleImage = new ImageIcon(getClass().getClassLoader().getResource("img/logo_720.png"));
         Image img = titleImage.getImage();
-        Image changeLogoImg = img.getScaledInstance(550, 110, Image.SCALE_SMOOTH);
+        Image changeLogoImg = img.getScaledInstance(550, 180, Image.SCALE_SMOOTH);
         ImageIcon changeLogoIcon = new ImageIcon(changeLogoImg);
         JLabel titleLb = new JLabel();
         titleLb.setIcon(changeLogoIcon);
