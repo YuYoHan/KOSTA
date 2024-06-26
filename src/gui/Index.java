@@ -49,11 +49,11 @@ public class Index extends JFrame {
 
         // 메인 텍스트 패널에 담기
         JLabel jLabel1 = new JLabel("방명록을 통해");
-        jLabel1.setFont(new Font("",Font.BOLD,30));
+        jLabel1.setFont(new Font("", Font.BOLD, 30));
         JLabel jLabel2 = new JLabel("생각을 공유하세요");
-        jLabel2.setFont(new Font("",Font.BOLD,30));
+        jLabel2.setFont(new Font("", Font.BOLD, 30));
 
-        rightTextPanel.setLayout(new GridLayout(2,1));
+        rightTextPanel.setLayout(new GridLayout(2, 1));
         rightTextPanel.add(jLabel1);
         rightTextPanel.add(jLabel2);
 
@@ -88,23 +88,8 @@ public class Index extends JFrame {
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        // 회원가입
-//        signUpButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                new SignUp(Index.this);
-//                setVisible(false);
-//            }
-//        });
-//        // 로그인 버튼 클릭 시
-//        loginButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                new Login(Index.this); // 로그인 창 보여주기
-//                setVisible(false); // 현재 창 숨기기
-//            }
-//        });
     }
+
     // 로그인 후 보이는 창
     public void afterLogin() {
         // 기존 컴포넌트들을 제거
@@ -128,14 +113,11 @@ public class Index extends JFrame {
         jPanel2.add(board_button);
         add(jPanel2, BorderLayout.CENTER);
 
-        logout_button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("로그아웃 메뉴를 선택하였습니다.");
-                SessionManager.logoutUser();
-                dispose(); // 현재 윈도우를 닫음
-                setVisible(true);
-            }
+        logout_button.addActionListener(e -> {
+            System.out.println("로그아웃 메뉴를 선택하였습니다.");
+            SessionManager.logoutUser();
+            dispose(); // 현재 윈도우를 닫음
+            setVisible(true);
         });
 
         board_button.addActionListener(new ActionListener() {
@@ -143,7 +125,7 @@ public class Index extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("게시글 메뉴를 선택하였습니다.");
                 boolean check = SessionManager.isLoggedIn();
-                if(check) {
+                if (check) {
                     return;
                 }
             }
@@ -152,6 +134,7 @@ public class Index extends JFrame {
         revalidate(); // 변경된 GUI를 다시 그리도록 갱신
 
         // JFrame 설정
+        setTitle("메인페이지");
         setSize(1440, 800);
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
