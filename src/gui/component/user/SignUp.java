@@ -4,6 +4,7 @@ package gui.component.user;
 import config.PasswordEncode;
 import dao.UserDAO;
 import dto.UserDTO;
+import gui.Index;
 import gui.component.global.HintPasswordField;
 import gui.component.global.HintTextField;
 
