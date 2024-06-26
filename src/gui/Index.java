@@ -53,9 +53,15 @@ public class Index extends JFrame {
 
         // 메인 텍스트 패널에 담기
         JLabel jLabel1 = new JLabel("방명록을 통해");
-        jLabel1.setFont(new Font("",Font.BOLD,30));
+        jLabel1.setFont(CustomStyle.setCutomFont(50,'n'));
         JLabel jLabel2 = new JLabel("생각을 공유하세요");
-        jLabel2.setFont(new Font("",Font.BOLD,30));
+        jLabel2.setFont(CustomStyle.setCutomFont(50,'n'));
+
+        //텍스트 라벨 배경색 변경
+        jLabel1.setOpaque(true);
+        jLabel1.setBackground(Color.white);
+        jLabel2.setOpaque(true);
+        jLabel2.setBackground(Color.white);
 
         rightTextPanel.setLayout(new GridLayout(2,1));
         rightTextPanel.add(jLabel1);
