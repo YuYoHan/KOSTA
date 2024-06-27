@@ -1,12 +1,15 @@
 package gui.component.global;
 
+import gui.CustomStyle;
+
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class Footer extends JPanel{
     public Footer(){
         // 텍스트라벨 담을 패널 생성
-        setLayout(new GridLayout(1,2));
+        setLayout(new FlowLayout(FlowLayout.LEFT));
         JPanel panelRight = new JPanel();
         panelRight.setLayout(new GridLayout(5,1));
         panelRight.setBackground(Color.white);
@@ -17,6 +20,7 @@ public class Footer extends JPanel{
         Image changelogoImage = getlogoImage.getScaledInstance(100, 20, Image.SCALE_SMOOTH);
         ImageIcon changelogoImageIcon = new ImageIcon(changelogoImage);
         JLabel logoLabel = new JLabel(changelogoImageIcon);
+        logoLabel.setBorder(new EmptyBorder(0, CustomStyle.DISPLAY_MARGIN, 40, CustomStyle.DISPLAY_MARGIN));
 
         // 텍스트 라벨 생성 후 배경색 화이트로 변경
         JLabel kosta = new JLabel("© KOSTA.");
