@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import gui.CustomStyle;
 
+//흰색 배경의 둥근 모서리를 가진 JTextField이며, 매개변수로 JTextField와 동일한 값을 받는다.
 public class RoundInput extends JPanel{
 	protected JTextField input;
 	
