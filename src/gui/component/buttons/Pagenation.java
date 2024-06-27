@@ -10,6 +10,10 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import gui.CustomStyle;
 
+//페이지네이션으로 끝 번호를 매개변수로 받는다.
+//unit 는 페이지 네이션의 버튼들의 단위로 변경 가능하다.(1~10, 11~20, ...)
+//매개변수를 주지 않을 경우 end 값은 1이 된다.
+//필요에 따라 페이지네이션 화살표 버튼이 생성된다.
 public class Pagenation extends JPanel{
 	private int start = 1;	//페이지네이션 버튼 시작번호
 	private int unit = 10;	//한 페이지에 최대 몇개의 버튼까지 보내줄 건지
