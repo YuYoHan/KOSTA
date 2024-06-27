@@ -28,7 +28,16 @@ public class Index extends JFrame {
         headerPanel.getButtonLogout().setVisible(false);
         headerPanel.getButtonPostList().setVisible(false);
 
-        //푸터 패널 생성
+        // 로그인 된 경우
+        if(SessionManager.getCurrentUser() != null) {
+            headerPanel.getButtonMyPage().setVisible(true);
+            headerPanel.getButtonLogout().setVisible(true);
+            headerPanel.getButtonPostList().setVisible(true);
+            headerPanel.getButtonLogin().setVisible(false);
+            headerPanel.getButtonSignUp().setVisible(false);
+        }
+
+         //푸터 패널 생성
         JPanel footerPanel = new JPanel();
         footerPanel.setBackground(Color.CYAN);
 
@@ -92,22 +101,6 @@ public class Index extends JFrame {
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        // 회원가입
-//        signUpButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                new SignUp(Index.this);
-//                setVisible(false);
-//            }
-//        });
-//        // 로그인 버튼 클릭 시
-//        loginButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                new Login(Index.this); // 로그인 창 보여주기
-//                setVisible(false); // 현재 창 숨기기
-//            }
-//        });
     }
     // 로그인 후 보이는 창
     public void afterLogin() {
@@ -160,7 +153,6 @@ public class Index extends JFrame {
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
-
 
     public static void main(String[] args) {
         new Index();
