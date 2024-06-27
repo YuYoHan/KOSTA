@@ -1,6 +1,7 @@
 package gui;
 
 import config.SessionManager;
+import gui.component.global.Footer;
 import gui.component.global.Header;
 
 import javax.swing.*;
@@ -38,8 +39,8 @@ public class Index extends JFrame {
         }
 
          //푸터 패널 생성
-        JPanel footerPanel = new JPanel();
-        footerPanel.setBackground(Color.CYAN);
+        Footer footerPanel = new Footer();
+//        footerPanel.setBackground(Color.CYAN);
 
         // 메인 이미지 패널에 담기
         ImageIcon mainImage = new ImageIcon(getClass().getClassLoader().getResource("img/main_image_720.png"));
