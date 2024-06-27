@@ -5,6 +5,7 @@ import java.awt.event.MouseListener;
 
 import gui.CustomStyle;
 
+//투명 배경의 글씨만 가지고 있는 버튼이다.
 public class TextButton extends RoundButtons{
 	public TextButton(String buttonLabel) {
 		super(buttonLabel);

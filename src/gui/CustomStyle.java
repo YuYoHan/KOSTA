@@ -11,7 +11,7 @@ import java.io.InputStream;
 
 import javax.swing.border.Border;
 
-
+//범용적으로 사용하는 스타일 관련 속성 및 클래스, 메소드를 미리 정의한다.
 public class CustomStyle{
 	//Common display maring
 	public static int DISPLAY_MARGIN = 96;
