@@ -25,7 +25,12 @@ public class Pagenation extends JPanel{
 	private int panelNum = 0;		//화살표 버튼으로 움직일 판넬 번호
 	JButton buttonPrev;
 	JButton buttonNext;
-	
+
+	//현재 페이지 번호를 return 한다. 이 때, 눈에 보이는 버튼이 아닌 0부터 시작한다.
+	public int getCurrentNum(){
+		return currentNum;
+	}
+
 	//페이지버튼 끝번호를 매개변수로 받는 생성자
 	public Pagenation(int end){
 		this.end = end;
