@@ -23,6 +23,10 @@ public class Index extends JFrame {
 
         //헤더 패널 생성
         Header headerPanel = new Header();
+        //헤더 패널 버튼 정리
+        headerPanel.getButtonMyPage().setVisible(false);
+        headerPanel.getButtonLogout().setVisible(false);
+        headerPanel.getButtonPostList().setVisible(false);
 
         //푸터 패널 생성
         JPanel footerPanel = new JPanel();
