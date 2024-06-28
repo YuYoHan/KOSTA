@@ -82,6 +82,9 @@ public class Index extends JFrame {
         }
         PrimaryButton pBtn = new PrimaryButton(pBtnName);
 
+        // 버튼 배경 색깔 수정
+        pBtn.setBackground(Color.white);
+
         rightTextPanel.setLayout(new GridLayout(3,1));
         rightTextPanel.add(jLabel1);
         rightTextPanel.add(jLabel2);
