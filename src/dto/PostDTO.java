@@ -7,6 +7,7 @@ public class PostDTO {
     private int userId;
     private String postContents;
     private Date postRegTime;
+    private String postTitle;
 
     public int getPostId() {
         return postId;
@@ -40,11 +41,16 @@ public class PostDTO {
         this.postRegTime = postRegTime;
     }
 
+    public String getPostTitle(){return postTitle;}
+
+    public void setPostTitle(String postTitle){this.postTitle = postTitle;}
+
     @Override
     public String toString() {
         return "PostDTO{" +
                 "postId=" + postId +
                 ", userId=" + userId +
+                ", postTitle='" + postTitle + '\'' +
                 ", postContents='" + postContents + '\'' +
                 ", postRegTime=" + postRegTime +
                 '}';
