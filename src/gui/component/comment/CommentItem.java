@@ -58,16 +58,6 @@ public class CommentItem extends JPanel {
         commentTxt.setWrapStyleWord(true);
         commentTxt.setEnabled(false);
         commentTxtWrap.add(commentTxt);
-
-        /*
-        PostRead.this.addComponentListener(new ComponentAdapter(){
-            public void componentResized(ComponentEvent e){
-                //S: comment 내용 크기 변경
-                //width: 창 크기 - (창 마진 + post 자체 마진 + textArea 마진 + 부모 선 마진)
-                commentTxt.setSize(PostRead.this.getWidth() - (CustomStyle.DISPLAY_MARGIN*2 + 48 + 16+2+32), 20);
-                //E: comment 내용 크기 변경
-            }
-        });*/
     }
     public void setCommentWidth(int frameWidth){
         commentTxt.setSize(frameWidth - (CustomStyle.DISPLAY_MARGIN*2 + 48 + 16+2+32), 20);
