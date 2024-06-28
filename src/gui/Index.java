@@ -6,6 +6,7 @@ import gui.component.global.Footer;
 import gui.component.global.Header;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -66,14 +67,22 @@ public class Index extends JFrame {
         titleLb.setIcon(changeLogoIcon);
 
         // 메인 텍스트 패널에 담기
-        JLabel jLabel1 = new JLabel("방명록을 통해                               ");
+        JLabel jLabel1 = new JLabel("방명록을 통해                        ");
         jLabel1.setFont(CustomStyle.setCutomFont(40,'n'));
         jLabel1.setOpaque(true);
         jLabel1.setBackground(Color.WHITE);
-        JLabel jLabel2 = new JLabel("생각을 공유하세요                           ");
+        JLabel jLabel2 = new JLabel("생각을 공유하세요                     ");
         jLabel2.setFont(CustomStyle.setCutomFont(40,'n'));
         jLabel2.setOpaque(true);
         jLabel2.setBackground(Color.WHITE);
+
+        ImageIcon textImage = new ImageIcon(getClass().getClassLoader().getResource("img/text.png"));
+        Image txtimg = textImage.getImage();
+        Image changeTextImg = txtimg.getScaledInstance(350, 150, Image.SCALE_SMOOTH);
+        ImageIcon changeTextIcon = new ImageIcon(changeTextImg);
+        JLabel textLb = new JLabel();
+        textLb.setIcon(changeTextIcon);
+        textLb.setBorder(new EmptyBorder(35,0,35,0));
 
         // 회원가입버튼 / 게시물 작성 버튼
         String pBtnName = "지금 가입하기";
@@ -85,13 +94,16 @@ public class Index extends JFrame {
         // 버튼 배경 색깔 수정
         pBtn.setBackground(Color.white);
 
-        rightTextPanel.setLayout(new GridLayout(3,1));
+        rightTextPanel.setLayout(new BoxLayout(rightTextPanel, BoxLayout.Y_AXIS));
         rightTextPanel.add(jLabel1);
         rightTextPanel.add(jLabel2);
+        rightTextPanel.setBorder(new EmptyBorder(0, 50, 0, 30));
+        rightTextPanel.setBackground(Color.white);
         JPanel btnPanel = new JPanel();
         btnPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         btnPanel.setBackground(Color.white);
         btnPanel.add(pBtn);
+        rightTextPanel.add(textLb);
         rightTextPanel.add(btnPanel);
 
         // 메인 패널 위:로고  아래:이미지+텍스트
