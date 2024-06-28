@@ -41,7 +41,7 @@ public class Login extends JFrame {
         toMainPage.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 dispose();
-                setVisible(true);
+                setVisible(false);
             }
         });
 
@@ -184,8 +184,12 @@ public class Login extends JFrame {
                     if (findUser != null) {
                         JOptionPane.showMessageDialog(null, "로그인 성공");
                         SessionManager.loginUser(findUser.getNickName());
+                        String currentUser = SessionManager.getCurrentUser();
+                        System.out.println(currentUser);
                         dispose(); // 현재 창 닫기
-                        mainPage.afterLogin(); // 메인 창 다시 보이기
+                        new Index();
+                        mainPage.setVisible(false);
+
                     } else {
                         JOptionPane.showMessageDialog(null, "로그인 실패");
                         SessionManager.loginUser(null);
