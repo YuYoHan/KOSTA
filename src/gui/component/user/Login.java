@@ -210,7 +210,7 @@ public class Login extends JFrame {
             Matcher matcher = pattern.matcher(id);
             System.out.println("아이디 검증 : " + matcher.matches());
 
-            if (findUser.getUserLoginID() == null) {
+            if (findUser.getUserLoginID() != null) {
                 return matcher.matches();
             }
             return false;
