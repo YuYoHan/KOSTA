@@ -1,4 +1,4 @@
-package gui;
+package gui.component.post;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -14,6 +14,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import gui.CustomStyle;
 import gui.CustomStyle.DrowSquare;
 import gui.component.buttons.DefaultButton;
 import gui.component.buttons.Pagenation;
