@@ -29,7 +29,7 @@ public class UserInfo extends JFrame {
     private Vector<String> colNames;
     private Vector<Vector<String>> rowData;
     private JTable table;
-    private String selectedId;
+    private static String selectedId;
 
     public UserInfo(Index mainPage) {
         // 회원수정 패널
@@ -76,6 +76,8 @@ public class UserInfo extends JFrame {
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(10, 10, 10, 10); // 여백 설정
+
+        loadUser();
 
         // 네모칸 크기 조절
         userLoginId = new JTextField(15);
@@ -185,7 +187,7 @@ public class UserInfo extends JFrame {
         btnUpdate.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                loadUser();
                 String userId = userLoginId.getText();
                 System.out.println("유저 아이디 : " + userId);
                 UserDTO select = UserDAO.select(userId);
@@ -234,6 +236,7 @@ public class UserInfo extends JFrame {
         btnRemove.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                loadUser();
                 String userId = userLoginId.getText();
                 System.out.println("유저 아이디 : " + userId);
 
@@ -290,11 +293,13 @@ public class UserInfo extends JFrame {
     public void loadUser() {
         String loginId = SessionManager.getCurrentUser();
         System.out.println(loginId);
+        System.out.println("로그인 중인 아이디 체크 : " + loginId);
 
-        UserDTO select = UserDAO.select(loginId);
+        UserDTO select = UserDAO.selectByNickName(loginId);
         System.out.println(select);
 
         selectedId = select.getUserLoginID();
+        System.out.println("아이디 조회 : " + selectedId);
     }
 
     // 소문자, 대문자, 0~9 숫자, 특수문자 8자리 이상!(소문자, 대문자 같이 안써도 됨!)
