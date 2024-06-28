@@ -60,7 +60,7 @@ public class Index extends JFrame {
         //메인 로고 라벨 만들기
         ImageIcon titleImage = new ImageIcon(getClass().getClassLoader().getResource("img/logo_720.png"));
         Image img = titleImage.getImage();
-        Image changeLogoImg = img.getScaledInstance(450, 110, Image.SCALE_SMOOTH);
+        Image changeLogoImg = img.getScaledInstance(500, 110, Image.SCALE_SMOOTH);
         ImageIcon changeLogoIcon = new ImageIcon(changeLogoImg);
         JLabel titleLb = new JLabel();
         titleLb.setIcon(changeLogoIcon);
