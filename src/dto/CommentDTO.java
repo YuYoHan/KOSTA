@@ -1,16 +1,18 @@
 package dto;
 
-import java.util.Date;
+
+import java.sql.Date;
+import java.time.LocalDateTime;
 
 public class CommentDTO {
     private int userId;
     private int postId;
     private int commentId;
     private String commentContents;
-    private Date regDate;
+    private LocalDateTime regDate;
 
     public CommentDTO() {}
-    public CommentDTO(int userId, int postId, int commentId, String commentContents, Date regDate) {}
+    public CommentDTO(int userId, int postId, int commentId, String commentContents, LocalDateTime regDate) {}
 
     public int getUserId() {
         return userId;
@@ -44,11 +46,11 @@ public class CommentDTO {
         this.commentId = commentId;
     }
 
-    public Date getRegDate() {
+    public LocalDateTime getRegDate() {
         return regDate;
     }
 
-    public void setRegDate(Date regDate) {
+    public void setRegDate(LocalDateTime regDate) {
         this.regDate = regDate;
     }
 
