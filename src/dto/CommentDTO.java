@@ -5,11 +5,12 @@ import java.util.Date;
 public class CommentDTO {
     private int userId;
     private int postId;
-    private String commentContents;
     private int commentId;
+    private String commentContents;
     private Date regDate;
 
     public CommentDTO() {}
+    public CommentDTO(int userId, int postId, int commentId, String commentContents, Date regDate) {}
 
     public int getUserId() {
         return userId;

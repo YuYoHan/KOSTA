@@ -234,7 +234,7 @@ public class Login extends JFrame {
         return matcher_pwd.matches();
     }
 
-    public static void main(String[] args) {
-        new Login(new Index());
-    }
+//    public static void main(String[] args) {
+//        new Login(new Index());
+//    }
 }

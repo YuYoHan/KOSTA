@@ -298,6 +298,7 @@ public class PostRead extends JFrame {
         commentList.add(commentListWrap);
 
         commentItems = new ArrayList<>();
+
         commentItems.add(new CommentItem("1","1","1"));
         commentItems.add(new CommentItem("2","2","2"));
 

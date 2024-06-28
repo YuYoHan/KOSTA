@@ -1,6 +1,7 @@
 package gui;
 
 import config.SessionManager;
+import gui.component.buttons.PrimaryButton;
 import gui.component.global.Footer;
 import gui.component.global.Header;
 
@@ -29,6 +30,9 @@ public class Index extends JFrame {
         headerPanel.getButtonLogout().setVisible(false);
         headerPanel.getButtonPostList().setVisible(false);
 
+        String currentUser = SessionManager.getCurrentUser();
+        System.out.println(currentUser);    // 로그인 유저가 제대로 들어오는지 확인
+
         // 로그인 된 경우
         if(SessionManager.getCurrentUser() != null) {
             headerPanel.getButtonMyPage().setVisible(true);
@@ -40,40 +44,51 @@ public class Index extends JFrame {
 
          //푸터 패널 생성
         Footer footerPanel = new Footer();
-//        footerPanel.setBackground(Color.CYAN);
 
         // 메인 이미지 패널에 담기
         ImageIcon mainImage = new ImageIcon(getClass().getClassLoader().getResource("img/main_image_720.png"));
-
         Image imgMain = mainImage.getImage();
         Image chageMainImg = imgMain.getScaledInstance(734, 547, Image.SCALE_SMOOTH);
         ImageIcon changeMainIcon = new ImageIcon(chageMainImg);
 
         JLabel mainLb = new JLabel();
+        mainLb.setOpaque(true);
+        mainLb.setBackground(Color.WHITE);
         mainLb.setIcon(changeMainIcon);
         leftImagePanel.add(mainLb);
 
         //메인 로고 라벨 만들기
         ImageIcon titleImage = new ImageIcon(getClass().getClassLoader().getResource("img/logo_720.png"));
         Image img = titleImage.getImage();
-        Image changeLogoImg = img.getScaledInstance(550, 180, Image.SCALE_SMOOTH);
+        Image changeLogoImg = img.getScaledInstance(450, 110, Image.SCALE_SMOOTH);
         ImageIcon changeLogoIcon = new ImageIcon(changeLogoImg);
         JLabel titleLb = new JLabel();
         titleLb.setIcon(changeLogoIcon);
 
         // 메인 텍스트 패널에 담기
-        JLabel jLabel1 = new JLabel("방명록을 통해");
-        jLabel1.setFont(new Font("",Font.BOLD,30));
+        JLabel jLabel1 = new JLabel("방명록을 통해                               ");
+        jLabel1.setFont(CustomStyle.setCutomFont(40,'n'));
         jLabel1.setOpaque(true);
         jLabel1.setBackground(Color.WHITE);
-        JLabel jLabel2 = new JLabel("생각을 공유하세요");
-        jLabel2.setFont(new Font("",Font.BOLD,30));
+        JLabel jLabel2 = new JLabel("생각을 공유하세요                           ");
+        jLabel2.setFont(CustomStyle.setCutomFont(40,'n'));
         jLabel2.setOpaque(true);
         jLabel2.setBackground(Color.WHITE);
 
-        rightTextPanel.setLayout(new GridLayout(2,1));
+        // 회원가입버튼 / 게시물 작성 버튼
+        String pBtnName = "지금 가입하기";
+        if (SessionManager.getCurrentUser() != null) {
+            pBtnName="게시물 작성";
+        }
+        PrimaryButton pBtn = new PrimaryButton(pBtnName);
+
+        rightTextPanel.setLayout(new GridLayout(3,1));
         rightTextPanel.add(jLabel1);
         rightTextPanel.add(jLabel2);
+        JPanel btnPanel = new JPanel();
+        btnPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        btnPanel.add(pBtn);
+        rightTextPanel.add(btnPanel);
 
         // 메인 패널 위:로고  아래:이미지+텍스트
         JPanel main1Panel = new JPanel();
@@ -104,6 +119,7 @@ public class Index extends JFrame {
 
         setSize(1440, 950);
         setVisible(true);
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
     }
