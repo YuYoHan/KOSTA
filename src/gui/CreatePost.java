@@ -14,6 +14,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 
+// 게시글 생성 클래스
 public class CreatePost extends JFrame {
     private HintTextField titleField;
     private HintTextArea contentField;
