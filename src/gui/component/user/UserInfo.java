@@ -77,13 +77,15 @@ public class UserInfo extends JFrame {
         gbc.gridy = 0;
         gbc.insets = new Insets(10, 10, 10, 10); // 여백 설정
 
-        userLoginId = new JTextField(5);
+        userLoginId = new JTextField(15);
         // userLoginId 필드를 수정 불가능하게 설정
         userLoginId.setEditable(false);
         userLoginId.setPreferredSize(new Dimension(170, 30));
+        userLoginId.setText(selectedId);
+        userLoginId.setBackground(Color.WHITE);
+        userLoginId.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         gbc.gridwidth = 2;
-        System.out.println(selectedId);
-        fieldPanel.add(new JLabel(selectedId));
+        System.out.println("가져온 아이디 : " + selectedId);
         fieldPanel.add(userLoginId, gbc);
 
 
@@ -180,7 +182,6 @@ public class UserInfo extends JFrame {
         btnUpdate.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                rowData.clear();
 
                 String userId = userLoginId.getText();
                 System.out.println("유저 아이디 : " + userId);
