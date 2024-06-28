@@ -20,6 +20,7 @@ import gui.component.buttons.DefaultButton;
 import gui.component.buttons.TextButton;
 import gui.component.user.Login;
 import gui.component.user.SignUp;
+import gui.component.user.UserInfo;
 
 public class Header extends JPanel{
 	private NavButton buttonPostList = new NavButton("방명록");
@@ -83,6 +84,13 @@ public class Header extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				SessionManager.logoutUser();
+			}
+		});
+		//마이페이지 버튼
+		buttonMyPage.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new UserInfo(new Index());
 			}
 		});
 
