@@ -4,6 +4,7 @@ import config.SessionManager;
 import gui.component.buttons.PrimaryButton;
 import gui.component.global.Footer;
 import gui.component.global.Header;
+import gui.component.user.SignUp;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -89,10 +90,10 @@ public class Index extends JFrame {
         if (SessionManager.getCurrentUser() != null) {
             pBtnName="게시물 작성";
         }
-        PrimaryButton pBtn = new PrimaryButton(pBtnName);
+        PrimaryButton mainSignupBtn = new PrimaryButton(pBtnName);
 
         // 버튼 배경 색깔 수정
-        pBtn.setBackground(Color.white);
+        mainSignupBtn.setBackground(Color.white);
 
         rightTextPanel.setLayout(new BoxLayout(rightTextPanel, BoxLayout.Y_AXIS));
         rightTextPanel.add(jLabel1);
@@ -102,7 +103,7 @@ public class Index extends JFrame {
         JPanel btnPanel = new JPanel();
         btnPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         btnPanel.setBackground(Color.white);
-        btnPanel.add(pBtn);
+        btnPanel.add(mainSignupBtn);
         rightTextPanel.add(textLb);
         rightTextPanel.add(btnPanel);
 
@@ -138,57 +139,15 @@ public class Index extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-    }
-    // 로그인 후 보이는 창
-    public void afterLogin() {
-        // 기존 컴포넌트들을 제거
-        getContentPane().removeAll();
-        String currentUser = SessionManager.getCurrentUser();
-        System.out.println("현재 접속중인 닉네임 : " + currentUser);
-
-        JButton logout_button = new JButton("로그아웃");
-        JButton myInfo_button = new JButton("내정보보기");
-        JButton board_button = new JButton("게시물");
-
-        JPanel jPanel = new JPanel();
-        jPanel.add(logout_button);
-        jPanel.add(myInfo_button);
-        jPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        setLayout(new BorderLayout());
-        add(jPanel, BorderLayout.NORTH);
-
-        JPanel jPanel2 = new JPanel();
-        jPanel2.setLayout(new FlowLayout(FlowLayout.CENTER));
-        jPanel2.add(board_button);
-        add(jPanel2, BorderLayout.CENTER);
-
-        logout_button.addActionListener(new ActionListener() {
+        // 지금 가입하기 버튼 기능
+        JFrame page=this;
+        mainSignupBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("로그아웃 메뉴를 선택하였습니다.");
-                SessionManager.logoutUser();
-                dispose(); // 현재 윈도우를 닫음
-                setVisible(true);
+                new SignUp(page);
             }
         });
 
-        board_button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("게시글 메뉴를 선택하였습니다.");
-                boolean check = SessionManager.isLoggedIn();
-                if(check) {
-                    return;
-                }
-            }
-        });
-
-        revalidate(); // 변경된 GUI를 다시 그리도록 갱신
-
-        // JFrame 설정
-        setSize(1440, 800);
-        setVisible(true);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
     public static void main(String[] args) {
