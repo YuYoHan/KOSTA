@@ -2,7 +2,7 @@ package dto;
 
 import java.util.Date;
 
-public class PostDTO {
+public class RequestPostDTO {
     private int postId;
     private int userId;
     private String postContents;
