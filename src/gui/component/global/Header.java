@@ -8,9 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import config.SessionManager;
@@ -29,7 +27,7 @@ public class Header extends JPanel{
 	private DefaultButton buttonLogout = new DefaultButton("로그아웃");
 	private DefaultButton buttonSignUp = new DefaultButton("회원가입");
 	//첫번째 매개변수 : 메뉴 이동 버튼, 두번째 매개변수 : 로그인 로그아웃 회원가입 등의 버튼
-	public Header(){
+	public Header(JFrame page){
 		setLayout(new BorderLayout());
 		setBorder(new EmptyBorder(24, CustomStyle.DISPLAY_MARGIN, 24, CustomStyle.DISPLAY_MARGIN));
 		setBackground(CustomStyle.white);
@@ -70,27 +68,30 @@ public class Header extends JPanel{
 		buttonSignUp.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new SignUp(new Index());
+				new SignUp(page);
 			}
 		});
 		// 로그인 버튼
 		buttonLogin.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new Login(new Index());
+				new Login(page);
 			}
 		});
+		// 로그아웃 버튼
 		buttonLogout.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				SessionManager.logoutUser();
+				page.setVisible(false);
+				new Index();
 			}
 		});
 		//마이페이지 버튼
 		buttonMyPage.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new UserInfo(new Index());
+				new UserInfo(page);
 			}
 		});
 

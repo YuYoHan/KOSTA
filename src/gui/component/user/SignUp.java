@@ -32,7 +32,7 @@ public class SignUp extends JFrame {
     private boolean idAvailable = false;
     private boolean emailAvailable = false;
 
-    public SignUp(Index mainPage) {
+    public SignUp(JFrame mainPage) {
         // 회원가입 구현할 패널 생성
         JPanel mainPanel = new JPanel();
         // 세로로 쌓이도록 설정

@@ -24,7 +24,7 @@ public class Index extends JFrame {
         JPanel rightTextPanel = new JPanel();
 
         //헤더 패널 생성
-        Header headerPanel = new Header();
+        Header headerPanel = new Header(this);
         //헤더 패널 버튼 정리
         headerPanel.getButtonMyPage().setVisible(false);
         headerPanel.getButtonLogout().setVisible(false);

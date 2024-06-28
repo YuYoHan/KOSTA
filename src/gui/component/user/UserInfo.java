@@ -31,7 +31,7 @@ public class UserInfo extends JFrame {
     private JTable table;
     private String selectedId;
 
-    public UserInfo(Index mainPage) {
+    public UserInfo(JFrame mainPage) {
         // 회원수정 패널
         JPanel mainPanel = new JPanel();
         // 세로로 쌓이게
