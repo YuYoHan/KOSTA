@@ -17,10 +17,10 @@ public class Footer extends JPanel{
         // 왼쪽 로고라벨 생성
         ImageIcon logoImage = new ImageIcon(getClass().getClassLoader().getResource("img/footer_logo.png"));
         Image getlogoImage = logoImage.getImage();
-        Image changelogoImage = getlogoImage.getScaledInstance(100, 20, Image.SCALE_SMOOTH);
+        Image changelogoImage = getlogoImage.getScaledInstance(100, 25, Image.SCALE_SMOOTH);
         ImageIcon changelogoImageIcon = new ImageIcon(changelogoImage);
         JLabel logoLabel = new JLabel(changelogoImageIcon);
-        logoLabel.setBorder(new EmptyBorder(0, CustomStyle.DISPLAY_MARGIN, 40, CustomStyle.DISPLAY_MARGIN));
+        logoLabel.setBorder(new EmptyBorder(0, CustomStyle.DISPLAY_MARGIN, 60, CustomStyle.DISPLAY_MARGIN));
 
         // 텍스트 라벨 생성 후 배경색 화이트로 변경
         JLabel kosta = new JLabel("© KOSTA.");
