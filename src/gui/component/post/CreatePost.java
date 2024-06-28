@@ -1,5 +1,7 @@
-package gui;
+package gui.component.post;
 
+import gui.CustomStyle;
+import gui.Index;
 import gui.component.buttons.DefaultButton;
 import gui.component.buttons.PrimaryButton;
 import gui.component.global.Header;
@@ -20,7 +22,7 @@ public class CreatePost extends JFrame {
     private HintTextArea contentField;
 
     public CreatePost(Index mainPage) {
-        Header header = new Header();
+        Header header = new Header(this);
         add(header, BorderLayout.NORTH);
 
         // panel 에 제목 panel2에 내용, panel3에 버튼
