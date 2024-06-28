@@ -29,7 +29,7 @@ public class UserInfo extends JFrame {
     private Vector<String> colNames;
     private Vector<Vector<String>> rowData;
     private JTable table;
-    private static String selectedId;
+    private String selectedId;
 
     public UserInfo(Index mainPage) {
         // 회원수정 패널
@@ -51,7 +51,8 @@ public class UserInfo extends JFrame {
         toMainPage.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 dispose();
-                mainPage.afterLogin();
+                new Index();
+                mainPage.setVisible(false);
             }
         });
 
@@ -126,7 +127,7 @@ public class UserInfo extends JFrame {
                     JOptionPane.showMessageDialog(null, "이메일을 입력하세요");
                     emailAvailable = false;
                 } else if (email.matches("^[가-힣]*$") ||
-                        email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
+                        !email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
                     JOptionPane.showMessageDialog(null, "이메일 형식을 맞춰주세요.");
                     emailAvailable = false;
                 } else {
@@ -189,43 +190,50 @@ public class UserInfo extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 loadUser();
                 String userId = userLoginId.getText();
-                System.out.println("유저 아이디 : " + userId);
+                System.out.println("수정 유저 아이디 : " + userId);
                 UserDTO select = UserDAO.select(userId);
 
-                if (!checkPw(userPassword.getText())) {
+
+                String encodePw = PasswordEncode.encode(String.valueOf(userPassword.getPassword()));
+                System.out.println("인코딩 비번 체크 : " + encodePw);
+
+                if (!String.valueOf(userPassword.getPassword()).isEmpty() &&
+                        !checkPw(String.valueOf(userPassword.getPassword()))) {
                     System.out.println("비밀번호는 대소문자, 숫자, 특수문자를 포함하여 8글자 이상 20글자 이하여야 합니다.");
                     JOptionPane.showMessageDialog(null, "비밀번호는 대소문자, 숫자, 특수문자를 포함하여 8글자 이상 20글자 이하여야 합니다.");
                     return;
                 }
 
-                String encodePw = PasswordEncode.encode(userPassword.getText());
-
-                if (encodePw.equals(select.getUserPw())) {
-                    System.out.println("동일한 비밀번호이기 때문에 바꿀 수 없습니다.");
-                    JOptionPane.showMessageDialog(null, "기존에 동일한 비밀번호로 바꿀 수 없습니댜.");
-                    return;
+                if (!String.valueOf(userPassword.getPassword()).isEmpty()) {
+                    if (encodePw.equals(select.getUserPw())) {
+                        System.out.println("동일한 비밀번호이기 때문에 바꿀 수 없습니다.");
+                        JOptionPane.showMessageDialog(null, "기존에 동일한 비밀번호로 바꿀 수 없습니댜.");
+                        return;
+                    }
                 }
 
                 String email = userEmail.getText();
-                if (!checkEmail(email)) {
-                    JOptionPane.showMessageDialog(null, "이메일 중복을 확인해주세요.");
-                    return; // 중복되는 이메일일 경우 회원가입 중지
+                System.out.println("1" + email);
+                if (!email.isEmpty()) {
+                    if (!emailAvailable) {
+                        JOptionPane.showMessageDialog(null, "이메일 중복을 확인해주세요.");
+                        return; // 중복되는 이메일일 경우 회원가입 중지
+                    }
                 }
 
-                UserDTO user = new UserDTO();
-                user.setUserPw(encodePw);
-                user.setUserEmail(userEmail.getText());
-                user.setNickName(userNickName.getText());
-                System.out.println(user);
+                select.setUserPw(encodePw.isEmpty() ? select.getUserPw() : encodePw);
+                select.setUserEmail(userEmail.getText().isEmpty() ?
+                        select.getUserEmail() : userEmail.getText());
+                select.setNickName(userNickName.getText().isEmpty() ?
+                        select.getNickName() : userNickName.getText());
+                System.out.println(select);
 
-                Vector<String> row = rowData.get(0);
-                int selectedId = Integer.parseInt(row.get(0));
-
-                int update = UserDAO.update(user, selectedId);
+                int update = UserDAO.update(select, select.getUserId());
                 if (update > 0) {
                     JOptionPane.showMessageDialog(null, "유저 정보를 수정했습니다.");
                     dispose(); // 현재 창 닫기
-                    mainPage.setVisible(true); // 메인 창 다시 보이기
+                    new Index();
+                    mainPage.setVisible(false);
                 } else {
                     JOptionPane.showMessageDialog(null, "유저 정보를 수정 실패했습니다.");
                 }
@@ -272,8 +280,9 @@ public class UserInfo extends JFrame {
                             if (delete > 0) {
                                 System.out.println("삭제 성공");
                                 JOptionPane.showMessageDialog(null, "삭제 성공했습니다.");
-                                dispose();
-                                mainPage.setVisible(true);
+                                dispose(); // 현재 창 닫기
+                                new Index();
+                                mainPage.setVisible(false);
                             }
                         } else {
                             // 비밀번호가 일치하지 않을 경우 메시지를 출력합니다.
@@ -282,6 +291,7 @@ public class UserInfo extends JFrame {
                                     "비밀번호가 일치하지 않습니다.",
                                     "비밀번호 오류",
                                     JOptionPane.ERROR_MESSAGE);
+                            setVisible(true);
                         }
                     }
                 }
@@ -319,14 +329,11 @@ public class UserInfo extends JFrame {
         Pattern patternEmail = Pattern.compile(emailPattern);
         Matcher matcherEmail = patternEmail.matcher(email);
         UserDTO userDTO = UserDAO.selectByEmail(email);
+        System.out.println("이메일 체크 : " + userDTO);
 
-        if (matcherEmail.matches() && userDTO == null) {
+        if (matcherEmail.matches() && userDTO.getUserEmail() == null) {
             return true;
         }
         return false;
-    }
-
-    public static void main(String[] args) {
-        new UserInfo(new Index());
     }
 }
