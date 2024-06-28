@@ -2,69 +2,179 @@ package gui.component.user;
 
 
 import config.PasswordEncode;
+import config.SessionManager;
 import dao.UserDAO;
 import dto.UserDTO;
 import gui.Index;
+import gui.component.global.HintPasswordField;
+import gui.component.global.HintTextField;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class UserInfo extends JFrame {
     private JTextField userLoginId;
-    private JTextField userPassword;
+    private HintPasswordField userPassword;
     private JTextField userEmail;
+    private boolean emailAvailable;
     private JTextField userNickName;
+
+
     private Vector<String> colNames;
     private Vector<Vector<String>> rowData;
     private JTable table;
     private String selectedId;
 
     public UserInfo(Index mainPage) {
+        // 회원수정 패널
+        JPanel mainPanel = new JPanel();
+        // 세로로 쌓이게
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.setBackground(Color.white);
+
+        // 메인 페이지로
+        JPanel topPanel = new JPanel();
+        topPanel.setBackground(Color.WHITE);
+        topPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        JLabel toMainPage = new JLabel("<HTML><U>메인 페이지</U></HTML>");
+        toMainPage.setForeground(Color.BLUE);
+        toMainPage.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        topPanel.add(toMainPage);
+        mainPanel.add(topPanel, BorderLayout.NORTH);
+
+        toMainPage.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                dispose();
+                mainPage.afterLogin();
+            }
+        });
+
+        // 타이틀 구성
+        JPanel titlePanel = new JPanel();
+        titlePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        titlePanel.setBackground(Color.WHITE);
+        // 제목 추가
+        JLabel titleLabel = new JLabel("BELOG");
+        titleLabel.setFont(new Font("Spoqa Sans", Font.BOLD, 24));
+        // 가운데 정렬
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        titlePanel.add(titleLabel);
+        // 공백 추가
+        mainPanel.add(titlePanel, BorderLayout.NORTH);
+
+        // 글씨를 보여줄 패널
+        JPanel fieldPanel = new JPanel(new GridBagLayout());
+        fieldPanel.setBackground(Color.WHITE);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(10, 10, 10, 10); // 여백 설정
+
         userLoginId = new JTextField(5);
         // userLoginId 필드를 수정 불가능하게 설정
         userLoginId.setEditable(false);
-        userPassword = new JTextField(7);
-        userEmail = new JTextField(7);
-        userNickName = new JTextField(10);
+        userLoginId.setPreferredSize(new Dimension(170, 30));
+        gbc.gridwidth = 2;
+        System.out.println(selectedId);
+        fieldPanel.add(new JLabel(selectedId));
+        fieldPanel.add(userLoginId, gbc);
 
-        JPanel p = new JPanel();
-        p.add(new JLabel("아이디"));
-        p.add(userLoginId);
-        p.add(new JLabel("비밀번호"));
-        p.add(userPassword);
-        p.add(new JLabel("이메일"));
-        p.add(userEmail);
-        p.add(new JLabel("닉네임"));
-        p.add(userNickName);
 
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.gridwidth = 2;
+
+        userPassword = new HintPasswordField("비밀번호");
+        userPassword.setPreferredSize(new Dimension(170, 30));
+        fieldPanel.add(userPassword, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.gridwidth = 2;
+        userEmail = new HintTextField("이메일");
+        userEmail.setPreferredSize(new Dimension(170, 30));
+        fieldPanel.add(userEmail, gbc);
+
+        gbc.gridx = 2;
+        gbc.gridwidth = 1;
+
+        // 이메일 중복검사 버튼
+        JButton checkEmailButton = new JButton("중복 검사");
+        checkEmailButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String email = userEmail.getText();
+                if (checkEmail(email)) {
+                    JOptionPane.showMessageDialog(null, "사용가능한 이메일입니다.");
+                    emailAvailable = true;
+                } else if (email == null || email.isEmpty()) {
+                    System.out.println(email);
+                    JOptionPane.showMessageDialog(null, "이메일을 입력하세요");
+                    emailAvailable = false;
+                } else if (email.matches("^[가-힣]*$") ||
+                        email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
+                    JOptionPane.showMessageDialog(null, "이메일 형식을 맞춰주세요.");
+                    emailAvailable = false;
+                } else {
+                    JOptionPane.showMessageDialog(null, "이미 존재하는 이메일입니다.");
+                    emailAvailable = false;
+                }
+            }
+        });
+        checkEmailButton.setBackground(new Color(128, 0, 128));
+        checkEmailButton.setForeground(Color.WHITE);
+        checkEmailButton.setFocusPainted(false);
+        fieldPanel.add(checkEmailButton, gbc);
+
+        // 닉네임
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.gridwidth = 2;
+        userNickName = new HintTextField("닉네임");
+        userNickName.setPreferredSize(new Dimension(170, 30));
+        fieldPanel.add(userNickName, gbc);
+
+        mainPanel.add(fieldPanel, BorderLayout.CENTER);
+
+
+        // 수정하기 버튼
         JButton btnUpdate = new JButton("수정");
+        btnUpdate.setBackground(new Color(128, 0, 128)); // 보라색
+        btnUpdate.setForeground(Color.WHITE);
+        btnUpdate.setFocusPainted(false);
+        btnUpdate.setAlignmentX(Component.CENTER_ALIGNMENT);
+        // 삭제하기 버튼
         JButton btnRemove = new JButton("삭제");
-        JButton btnCancel = new JButton("취소");
-        p.add(btnUpdate);
-        p.add(btnRemove);
-        p.add(btnCancel);
-        colNames = new Vector<>();
-        colNames.add("아이디");
-        colNames.add("비밀번호");
-        colNames.add("이메일");
-        colNames.add("닉네임");
-        rowData = new Vector<>();
-        table = new JTable(rowData, colNames);
-        JScrollPane jsp = new JScrollPane(table);
-        add(p, BorderLayout.NORTH);
-        add(jsp, BorderLayout.CENTER);
+        btnRemove.setBackground(new Color(128, 0, 128)); // 보라색
+        btnRemove.setForeground(Color.WHITE);
+        btnRemove.setFocusPainted(false);
+        btnRemove.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JPanel footerPanel = new JPanel();
+        footerPanel.add(btnUpdate);
+        footerPanel.add(btnRemove);
+        footerPanel.setBackground(Color.WHITE);
+        footerPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+
+        add(mainPanel);
+        add(footerPanel, BorderLayout.SOUTH);
+
 
         loadUser();
 
-        setSize(650, 300);
-        setVisible(true);
+        // JFrame 설정
+        setTitle("회원수정");
+        setSize(650, 450);
+        setLocationRelativeTo(null); // 화면 가운데 정렬
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        setVisible(true);
 
         // 수정
         btnUpdate.addActionListener(new ActionListener() {
@@ -170,30 +280,16 @@ public class UserInfo extends JFrame {
                 }
             }
         });
-
-
-        btnCancel.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-                mainPage.afterLogin();
-            }
-        });
     }
 
     public void loadUser() {
-        //JTable에 출력하는 메소드
-        rowData.clear();
-        String selected = selectedId;
-        UserDTO select = UserDAO.select(selected);
-        Vector<String> v = new Vector<>();
-        v.add(select.getUserId() + "");
-        v.add(select.getUserLoginID());
-        v.add(select.getUserPw());
-        v.add(select.getUserEmail());
-        v.add(select.getNickName());
-        rowData.add(v);
-        table.updateUI();
+        String loginId = SessionManager.getCurrentUser();
+        System.out.println(loginId);
+
+        UserDTO select = UserDAO.select(loginId);
+        System.out.println(select);
+
+        selectedId = select.getUserLoginID();
     }
 
     // 소문자, 대문자, 0~9 숫자, 특수문자 8자리 이상!(소문자, 대문자 같이 안써도 됨!)
@@ -218,5 +314,9 @@ public class UserInfo extends JFrame {
             return true;
         }
         return false;
+    }
+
+    public static void main(String[] args) {
+        new UserInfo(new Index());
     }
 }
