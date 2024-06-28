@@ -21,7 +21,7 @@ public class CreatePost extends JFrame {
     private HintTextField titleField;
     private HintTextArea contentField;
 
-    public CreatePost(Index mainPage) {
+    public CreatePost(JFrame mainPage) {
         Header header = new Header(this);
         add(header, BorderLayout.NORTH);
 
