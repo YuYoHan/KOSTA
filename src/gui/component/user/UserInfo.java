@@ -286,6 +286,7 @@ public class UserInfo extends JFrame {
         });
     }
 
+    // 회원정보 가져오기 메서드
     public void loadUser() {
         String loginId = SessionManager.getCurrentUser();
         System.out.println(loginId);
