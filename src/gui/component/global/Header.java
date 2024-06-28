@@ -3,6 +3,8 @@ package gui.component.global;
 import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -11,9 +13,14 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import config.SessionManager;
 import gui.CustomStyle;
+import gui.Index;
 import gui.component.buttons.DefaultButton;
 import gui.component.buttons.TextButton;
+import gui.component.user.Login;
+import gui.component.user.SignUp;
+import gui.component.user.UserInfo;
 
 public class Header extends JPanel{
 	private NavButton buttonPostList = new NavButton("방명록");
@@ -58,12 +65,42 @@ public class Header extends JPanel{
 		nav.setLayout(new FlowLayout());
 		nav.setBackground(CustomStyle.white);
 
+		// 버튼 액션 리스너 달기
+		// 회원가입 버튼
+		buttonSignUp.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new SignUp(new Index());
+			}
+		});
+		// 로그인 버튼
+		buttonLogin.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new Login(new Index());
+			}
+		});
+		buttonLogout.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SessionManager.logoutUser();
+			}
+		});
+		//마이페이지 버튼
+		buttonMyPage.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new UserInfo(new Index());
+			}
+		});
+
 		nav.add(buttonPostList);
 		nav.add(buttonMyPage);
 		nav.add(buttonLogin);
 		nav.add(buttonLogout);
 		nav.add(buttonSignUp);
 	}
+
 
 	public NavButton getButtonPostList() {
 		return buttonPostList;

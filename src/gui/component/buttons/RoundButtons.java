@@ -11,7 +11,8 @@ import javax.swing.JPanel;
 
 import gui.CustomStyle;
 
-//부모역할만
+//TextButton, DefaultButton, PrimaryButton 의 부모가 되는 버튼이다.
+//둥근 모서리를 가진 모든 버튼들의 부모역할을 한다.
 public class RoundButtons extends JButton{
 	RoundButtons(){
 		

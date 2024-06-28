@@ -43,11 +43,11 @@ public class HintPasswordField extends JPasswordField {
     }
 
     @Override
-      protected void paintComponent(Graphics g) {
-          super.paintComponent(g);
-          if (showingHint) {
-              int padding = (getHeight() - getFont().getSize()) / 2;
-              g.drawString(hint, getInsets().left, getFont().getSize() + padding - 2);
-          }
-      }
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (showingHint) {
+            int padding = (getHeight() - getFont().getSize()) / 2;
+            g.drawString(hint, getInsets().left, getFont().getSize() + padding - 2);
+        }
+    }
 }
