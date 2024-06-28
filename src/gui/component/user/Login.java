@@ -41,7 +41,7 @@ public class Login extends JFrame {
         toMainPage.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 dispose();
-                setVisible(true);
+                setVisible(false);
             }
         });
 
@@ -184,8 +184,12 @@ public class Login extends JFrame {
                     if (findUser != null) {
                         JOptionPane.showMessageDialog(null, "로그인 성공");
                         SessionManager.loginUser(findUser.getNickName());
+                        String currentUser = SessionManager.getCurrentUser();
+                        System.out.println(currentUser);
                         dispose(); // 현재 창 닫기
-                        mainPage.afterLogin(); // 메인 창 다시 보이기
+                        new Index();
+                        mainPage.setVisible(false);
+
                     } else {
                         JOptionPane.showMessageDialog(null, "로그인 실패");
                         SessionManager.loginUser(null);
@@ -210,7 +214,7 @@ public class Login extends JFrame {
             Matcher matcher = pattern.matcher(id);
             System.out.println("아이디 검증 : " + matcher.matches());
 
-            if (findUser.getUserLoginID() == null) {
+            if (findUser.getUserLoginID() != null) {
                 return matcher.matches();
             }
             return false;
@@ -230,7 +234,7 @@ public class Login extends JFrame {
         return matcher_pwd.matches();
     }
 
-    public static void main(String[] args) {
-        new Login(new Index());
-    }
+//    public static void main(String[] args) {
+//        new Login(new Index());
+//    }
 }
