@@ -2,6 +2,7 @@ package config;
 
 import java.sql.*;
 
+// jdbc 연결 클래스
 public class JDBCConfig {
     private static Connection connection;
     public static final String DRIVER = "oracle.jdbc.driver.OracleDriver";
