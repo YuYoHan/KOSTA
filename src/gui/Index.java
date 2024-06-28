@@ -90,6 +90,7 @@ public class Index extends JFrame {
         rightTextPanel.add(jLabel2);
         JPanel btnPanel = new JPanel();
         btnPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        btnPanel.setBackground(Color.white);
         btnPanel.add(pBtn);
         rightTextPanel.add(btnPanel);
 
