@@ -336,7 +336,7 @@ public class SignUp extends JFrame {
 
     // 닉네임 검사
     private static boolean checkNickName(String nickName) {
-        String regex = "^[ㄱ-ㅎ가-힣]{4,30}$";
+        String regex = "^[a-zA-Z0-9가-힣]{4,30}$";
         System.out.println("닉네임 체크 : " + nickName);
         Pattern compile = Pattern.compile(regex);
         Matcher matcher = compile.matcher(nickName);
