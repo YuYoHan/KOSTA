@@ -6,6 +6,17 @@ public class CommentComponentDTO {
     private String nickname;
     private LocalDateTime regDate;
     private String contents;
+    private int userId;
+
+    @Override
+    public String toString() {
+        return "CommentComponentDTO{" +
+                "nickname='" + nickname + '\'' +
+                ", regDate=" + regDate +
+                ", contents='" + contents + '\'' +
+                ", userId=" + userId +
+                '}';
+    }
 
     public String getNickname() {
         return nickname;
@@ -31,21 +42,18 @@ public class CommentComponentDTO {
         this.contents = contents;
     }
 
-    public CommentComponentDTO() {
+    public int getUserId() {
+        return userId;
     }
 
-    public CommentComponentDTO(String nickname, LocalDateTime regDate, String contents) {
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public CommentComponentDTO(String nickname, LocalDateTime regDate, String contents, int userId) {
         this.nickname = nickname;
         this.regDate = regDate;
         this.contents = contents;
-    }
-
-    @Override
-    public String toString() {
-        return "CommentComponentDTO{" +
-                "nickname='" + nickname + '\'' +
-                ", regDate=" + regDate +
-                ", contents='" + contents + '\'' +
-                '}';
+        this.userId = userId;
     }
 }
