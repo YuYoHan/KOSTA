@@ -5,14 +5,14 @@ import java.sql.Date;
 import java.time.LocalDateTime;
 
 public class CommentDTO {
-    private int userId;
-    private int postId;
     private int commentId;
     private String commentContents;
     private LocalDateTime regDate;
+    private int postId;
+    private int userId;
 
     public CommentDTO() {}
-    public CommentDTO(int userId, int postId, int commentId, String commentContents, LocalDateTime regDate) {}
+    public CommentDTO(int commentId,String commentContents,LocalDateTime regDate, int postId,int userId) {}
 
     public int getUserId() {
         return userId;
