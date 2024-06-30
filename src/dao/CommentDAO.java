@@ -1,5 +1,6 @@
 package dao;
 
+import dto.CommentComponentDTO;
 import dto.CommentDTO;
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -142,10 +143,48 @@ public class CommentDAO {
         return list;
     }
 
+    // comment gui에 필요한 데이터만 가져오는 메서드
+    public static ArrayList<CommentComponentDTO> getComments(int postid) {
+        String nickname = "";
+        String sql = "select NICKNAME,COMMENT_REGTIME,COMMENT_CONTENTS from users u, comments c where u.USER_ID=c.USER_ID and POST_ID=?";
+        ResultSet resultSet=null;
+        ArrayList<CommentComponentDTO> list = new ArrayList<CommentComponentDTO>();
+        CommentComponentDTO commentComponentDTO = null;
+        try {
+            Class.forName(driver);
+            connection = DriverManager.getConnection(url, username, password);
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1,postid);
+            resultSet= preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                commentComponentDTO = new CommentComponentDTO();
+                commentComponentDTO.setNickname(resultSet.getString(1));
+                commentComponentDTO.setRegDate(resultSet.getTimestamp(2).toLocalDateTime());
+                commentComponentDTO.setContents(resultSet.getString(3));
+                list.add(commentComponentDTO);
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+            } catch (Exception e2) {
+                System.out.println(e2.getMessage());
+            }
+        }
+        return list;
+    }
+
     public static void main(String[] args) {
         // SELECT TEST
-        ArrayList<CommentDTO> list = listComment(30);
+        ArrayList<CommentComponentDTO> list = getComments(30);
         System.out.println(list);
-
     }
 }
