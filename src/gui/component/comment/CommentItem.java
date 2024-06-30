@@ -1,5 +1,6 @@
 package gui.component.comment;
 
+import config.SessionManager;
 import gui.CustomStyle;
 import gui.component.post.PostRead;
 
@@ -24,10 +25,34 @@ public class CommentItem extends JPanel {
         commentItemContent.setBorder(new EmptyBorder(16,16,16,16));
         add(commentItemContent);
 
+        // top panel left : nickname    right : buttons
+        JPanel topWrap = new JPanel();
+        topWrap.setBackground(CustomStyle.white);
+        topWrap.setLayout(new BoxLayout(topWrap,BoxLayout.X_AXIS));
+        commentItemContent.add(topWrap, BorderLayout.NORTH);
+
         JPanel commentNicknameWrap = new JPanel();
         commentNicknameWrap.setBackground(CustomStyle.white);
         commentNicknameWrap.setLayout(new FlowLayout(FlowLayout.LEFT));
-        commentItemContent.add(commentNicknameWrap, BorderLayout.NORTH);
+        topWrap.add(commentNicknameWrap);
+        topWrap.add(Box.createHorizontalGlue());
+        JPanel commentButtonWrap = new JPanel();
+        commentButtonWrap.setBackground(CustomStyle.white);
+        commentButtonWrap.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        topWrap.add(commentButtonWrap);
+
+        if (nickname==SessionManager.getCurrentUser()){
+            JButton editButton = new JButton("수정");
+            editButton.setBackground(CustomStyle.white);
+            editButton.setFont(CustomStyle.setCutomFont(13,'n'));
+            editButton.setBorderPainted(false);
+            JButton deleteButton = new JButton("삭제");
+            deleteButton.setBackground(CustomStyle.white);
+            deleteButton.setFont(CustomStyle.setCutomFont(13,'n'));
+            deleteButton.setBorderPainted(false);
+            commentButtonWrap.add(editButton);
+            commentButtonWrap.add(deleteButton);
+        }
 
         JLabel commentNickname = new JLabel(nickname);
         commentNickname.setFont(CustomStyle.setCutomFont(14, 'b'));
@@ -58,6 +83,7 @@ public class CommentItem extends JPanel {
         commentTxt.setWrapStyleWord(true);
         commentTxt.setEnabled(false);
         commentTxtWrap.add(commentTxt);
+
     }
     public void setCommentWidth(int frameWidth){
         commentTxt.setSize(frameWidth - (CustomStyle.DISPLAY_MARGIN*2 + 48 + 16+2+32), 20);
