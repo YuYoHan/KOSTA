@@ -20,7 +20,7 @@ public class PostRead extends JFrame {
         setLayout(new BorderLayout());
         UIManager.put("TextArea.inactiveForeground", Color.BLACK);//TextArea enabled(false)인 상태에서도 글씨색 그대로
         //S: header
-        Header header = new Header();
+        Header header = new Header(this);
         header.getButtonPostList().setIsCurrent(true);
         header.getButtonLogout().setVisible(false);
         header.getButtonSignUp().setVisible(false);

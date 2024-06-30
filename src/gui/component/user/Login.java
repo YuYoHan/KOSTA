@@ -22,7 +22,7 @@ public class Login extends JFrame {
     private HintTextField userLoginId;
     private HintPasswordField userPassword;
 
-    public Login(Index mainPage) {
+    public Login(JFrame mainPage) {
         // 로그인 구현할 패널 생성
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));

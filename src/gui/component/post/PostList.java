@@ -25,7 +25,7 @@ import gui.component.input.RoundInput;
 public class PostList extends JFrame{
 	PostList(){
 		//S:header
-		Header header = new Header();
+		Header header = new Header(this);
 		header.getButtonLogout().setVisible(false);
 		header.getButtonSignUp().setVisible(false);
 		header.getButtonPostList().setIsCurrent(true);
