@@ -1,12 +1,7 @@
 package dao;
-import config.JDBCConfig;
-import dto.CommentDTO;
 
-import javax.sql.DataSource;
+import dto.CommentDTO;
 import java.sql.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 public class CommentDAO {
     public final static String driver = "oracle.jdbc.driver.OracleDriver";
@@ -18,7 +13,7 @@ public class CommentDAO {
     // 댓글 작성
     public static int insertComment(CommentDTO commentDTO) {
         String sql="insert into comments (comment_contents, post_id, user_id) values(?,?,?)";
-        int res=0;
+        int result=0;
         try {
             Class.forName(driver);
             connection = DriverManager.getConnection(url,username,password);
@@ -26,8 +21,7 @@ public class CommentDAO {
             preparedStatement.setString(1,commentDTO.getCommentContents());
             preparedStatement.setInt(2,commentDTO.getPostId());
             preparedStatement.setInt(3,commentDTO.getUserId());
-
-            res = preparedStatement.executeUpdate();
+            result = preparedStatement.executeUpdate();
 
         }catch (Exception e){
             System.out.println(e.getMessage());
@@ -43,8 +37,63 @@ public class CommentDAO {
                 System.out.println(e2.getMessage());
             }
             }
-        return res;
+        return result;
     }
+
+    public static int deleteComment(int commentID) {
+        String sql = "DELETE FROM COMMENTS WHERE comment_id = ?";
+        int result=0;
+        try {
+            Class.forName(driver);
+            connection = DriverManager.getConnection(url,username,password);
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, commentID);
+            result = preparedStatement.executeUpdate();
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+            } catch (Exception e2) {
+                System.out.println(e2.getMessage());
+            }
+        }
+        return result;
+    }
+
+//    public static int updateComment(CommentDTO commentDTO) {
+//        String sql = "UPDATE COMMENTS SET COMMENT_CONTENTS=? WHERE COMMENT_ID=?";
+//        int result=0;
+//        try {
+//            Class.forName(driver);
+//            connection = DriverManager.getConnection(url, username, password);
+//            preparedStatement = connection.prepareStatement(sql);
+//            preparedStatement.setString(1, commentDTO.getCommentContents());
+//            preparedStatement.setInt(2,commentDTO.getCommentId());
+//            result = preparedStatement.executeUpdate();
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//        }finally {
+//            try {
+//
+//                if (connection != null) {
+//                    connection.close();
+//                }
+//                if (preparedStatement != null) {
+//                    preparedStatement.close();
+//                }
+//            } catch (Exception e2) {
+//                System.out.println(e2.getMessage());
+//            }
+//        }
+//        return result;
+//    }
 
     // 포스트에 해당하는 댓글만 가져오기
 //    public ArrayList<CommentDTO> listComment(int postId) {
@@ -79,12 +128,20 @@ public class CommentDAO {
 
     public static void main(String[] args) {
         CommentDTO commentDTO = new CommentDTO();
-        commentDTO.setCommentContents("안녕");
-        commentDTO.setPostId(1);
-        commentDTO.setUserId(2);
-        System.out.println(commentDTO);
 
-        int re = insertComment(commentDTO);
-        System.out.println(re);
+//        // INSERT TEST
+//        commentDTO.setCommentContents("안녕");
+//        commentDTO.setPostId(1);
+//        commentDTO.setUserId(2);
+//        System.out.println(commentDTO);
+//
+//        int re = insertComment(commentDTO);
+//        System.out.println(re);
+
+        // DELETE TEST
+        commentDTO.setCommentId(59);
+        System.out.println(commentDTO);
+        int result = deleteComment(commentDTO.getCommentId());
+        System.out.println(result);
     }
 }
