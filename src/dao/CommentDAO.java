@@ -67,33 +67,33 @@ public class CommentDAO {
         return result;
     }
 
-//    public static int updateComment(CommentDTO commentDTO) {
-//        String sql = "UPDATE COMMENTS SET COMMENT_CONTENTS=? WHERE COMMENT_ID=?";
-//        int result=0;
-//        try {
-//            Class.forName(driver);
-//            connection = DriverManager.getConnection(url, username, password);
-//            preparedStatement = connection.prepareStatement(sql);
-//            preparedStatement.setString(1, commentDTO.getCommentContents());
-//            preparedStatement.setInt(2,commentDTO.getCommentId());
-//            result = preparedStatement.executeUpdate();
-//        } catch (Exception e) {
-//            System.out.println(e.getMessage());
-//        }finally {
-//            try {
-//
-//                if (connection != null) {
-//                    connection.close();
-//                }
-//                if (preparedStatement != null) {
-//                    preparedStatement.close();
-//                }
-//            } catch (Exception e2) {
-//                System.out.println(e2.getMessage());
-//            }
-//        }
-//        return result;
-//    }
+    public static int updateComment(CommentDTO commentDTO) {
+        String sql = "UPDATE COMMENTS SET COMMENT_CONTENTS=? WHERE COMMENT_ID=?";
+        int result=0;
+        try {
+            Class.forName(driver);
+            connection = DriverManager.getConnection(url, username, password);
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, commentDTO.getCommentContents());
+            preparedStatement.setInt(2,commentDTO.getCommentId());
+            result = preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }finally {
+            try {
+
+                if (connection != null) {
+                    connection.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+            } catch (Exception e2) {
+                System.out.println(e2.getMessage());
+            }
+        }
+        return result;
+    }
 
     // 포스트에 해당하는 댓글만 가져오기
 //    public ArrayList<CommentDTO> listComment(int postId) {
@@ -128,20 +128,10 @@ public class CommentDAO {
 
     public static void main(String[] args) {
         CommentDTO commentDTO = new CommentDTO();
-
-//        // INSERT TEST
-//        commentDTO.setCommentContents("안녕");
-//        commentDTO.setPostId(1);
-//        commentDTO.setUserId(2);
-//        System.out.println(commentDTO);
-//
-//        int re = insertComment(commentDTO);
-//        System.out.println(re);
-
-        // DELETE TEST
-        commentDTO.setCommentId(59);
-        System.out.println(commentDTO);
-        int result = deleteComment(commentDTO.getCommentId());
-        System.out.println(result);
+        // UPDATE TEST
+        commentDTO.setCommentId(60);
+        commentDTO.setCommentContents("수정된 내용 입력!");
+        int result = updateComment(commentDTO);
+        System.out.println("Result : " + result);
     }
 }
