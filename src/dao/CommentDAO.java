@@ -146,7 +146,7 @@ public class CommentDAO {
     // comment gui에 필요한 데이터만 가져오는 메서드
     public static ArrayList<CommentComponentDTO> getComments(int postid) {
         String nickname = "";
-        String sql = "select NICKNAME,COMMENT_REGTIME,COMMENT_CONTENTS from users u, comments c where u.USER_ID=c.USER_ID and POST_ID=?";
+        String sql = "select NICKNAME,COMMENT_REGTIME,COMMENT_CONTENTS,USER_ID from users u, comments c where u.USER_ID=c.USER_ID and POST_ID=?";
         ResultSet resultSet=null;
         ArrayList<CommentComponentDTO> list = new ArrayList<CommentComponentDTO>();
         CommentComponentDTO commentComponentDTO = null;
@@ -162,6 +162,7 @@ public class CommentDAO {
                 commentComponentDTO.setNickname(resultSet.getString(1));
                 commentComponentDTO.setRegDate(resultSet.getTimestamp(2).toLocalDateTime());
                 commentComponentDTO.setContents(resultSet.getString(3));
+                commentComponentDTO.setUserId(resultSet.getInt(4));
                 list.add(commentComponentDTO);
             }
 

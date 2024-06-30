@@ -8,6 +8,9 @@ public class CommentComponentDTO {
     private String contents;
     private int userId;
 
+    public CommentComponentDTO() {
+
+    }
     @Override
     public String toString() {
         return "CommentComponentDTO{" +
