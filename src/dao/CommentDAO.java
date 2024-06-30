@@ -2,6 +2,8 @@ package dao;
 
 import dto.CommentDTO;
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class CommentDAO {
     public final static String driver = "oracle.jdbc.driver.OracleDriver";
@@ -10,6 +12,7 @@ public class CommentDAO {
     public final static String password = "madang";
     public static Connection connection = null;
     public static PreparedStatement preparedStatement=null;
+
     // 댓글 작성
     public static int insertComment(CommentDTO commentDTO) {
         String sql="insert into comments (comment_contents, post_id, user_id) values(?,?,?)";
@@ -40,6 +43,7 @@ public class CommentDAO {
         return result;
     }
 
+    // 댓글 삭제
     public static int deleteComment(int commentID) {
         String sql = "DELETE FROM COMMENTS WHERE comment_id = ?";
         int result=0;
@@ -67,6 +71,7 @@ public class CommentDAO {
         return result;
     }
 
+    // 댓글 수정
     public static int updateComment(CommentDTO commentDTO) {
         String sql = "UPDATE COMMENTS SET COMMENT_CONTENTS=? WHERE COMMENT_ID=?";
         int result=0;
@@ -95,43 +100,52 @@ public class CommentDAO {
         return result;
     }
 
-    // 포스트에 해당하는 댓글만 가져오기
-//    public ArrayList<CommentDTO> listComment(int postId) {
-//        ArrayList<CommentDTO> list = new ArrayList<CommentDTO>();
-//        String sql="select * from comments where postid=?";
-//        ResultSet resultSet=null;
-//        try {
-//            Class.forName(driver);
-//            connection = DriverManager.getConnection(url,username,password);
-//            preparedStatement = connection.prepareStatement(sql);
-//            preparedStatement.setInt(1,postId);
-//            resultSet = preparedStatement.executeQuery();
-//            while (resultSet.next()) {
-//                LocalDateTime regDate = resultSet.getTimestamp(5).toLocalDateTime();
-//                list.add(new CommentDTO(resultSet.getInt(1),
-//                                        resultSet.getInt(2),
-//                                        resultSet.getInt(3),
-//                                        resultSet.getString(4),
-//                                        regDate));
-//            }
-//
-//        } catch (Exception e) {
-//        }finally {
-//            try {
-//
-//            } catch (Exception e2) {
-//            }
-//        }
-//
-//        return list;
-//    }
+//     포스트에 해당하는 댓글만 가져오기
+    public static ArrayList<CommentDTO> listComment(int postId) {
+        ArrayList<CommentDTO> list = new ArrayList<CommentDTO>();
+        String sql="select * from comments where post_id=?";
+        ResultSet resultSet=null;
+        CommentDTO commentDTO=null;
+        try {
+            Class.forName(driver);
+            connection = DriverManager.getConnection(url,username,password);
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1,postId);
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                commentDTO = new CommentDTO();
+                commentDTO.setCommentId(resultSet.getInt(1));
+                commentDTO.setCommentContents(resultSet.getString(2));
+                commentDTO.setRegDate(resultSet.getTimestamp(3).toLocalDateTime());
+                commentDTO.setPostId(postId);
+                commentDTO.setUserId(resultSet.getInt(5));
+                list.add(commentDTO);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+            } catch (Exception e2) {
+                System.out.println(e2.getMessage());
+            }
+        }
+        return list;
+    }
 
     public static void main(String[] args) {
-        CommentDTO commentDTO = new CommentDTO();
-        // UPDATE TEST
-        commentDTO.setCommentId(60);
-        commentDTO.setCommentContents("수정된 내용 입력!");
-        int result = updateComment(commentDTO);
-        System.out.println("Result : " + result);
+        // SELECT TEST
+        ArrayList<CommentDTO> list = listComment(30);
+        System.out.println(list);
+
     }
 }
