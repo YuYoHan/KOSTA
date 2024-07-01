@@ -15,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.lang.reflect.Constructor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -187,8 +188,14 @@ public class Login extends JFrame {
                         String currentUser = SessionManager.getCurrentUser();
                         System.out.println(currentUser);
                         dispose(); // 현재 창 닫기
-                        new Index();
+//                        new Index();
+                        Class<?> clazz = mainPage.getClass();
+                        System.out.println(clazz.getName());
+                        Constructor<?> constructor = clazz.getConstructor();
+                        constructor.newInstance();
+
                         mainPage.setVisible(false);
+
 
                     } else {
                         JOptionPane.showMessageDialog(null, "로그인 실패");
