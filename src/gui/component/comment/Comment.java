@@ -110,13 +110,13 @@ public class Comment extends JPanel {
                         public void actionPerformed(ActionEvent e) {
                             commentDTO.setCommentContents(commentTxt.getText());
                             CommentDAO.updateComment(commentDTO);
+                            contents=commentDTO.getCommentContents();
                             commentTxt.setText(contents);
                             commentTxt.setBorder(null);
                             commentTxt.setFont(CustomStyle.setCutomFont(16, 'n'));
                             commentTxt.setLineWrap(true);
                             commentTxt.setWrapStyleWord(true);
                             commentTxt.setEnabled(false);
-                            contents=commentDTO.getCommentContents();
                             commentWriteButton.setVisible(false);
                             updateUI();
                         }
