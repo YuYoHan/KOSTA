@@ -13,7 +13,7 @@ public class CommentDTO {
 
     public CommentDTO() {}
     public CommentDTO(int commentId,String commentContents,LocalDateTime regDate, int postId,int userId) {}
-
+    public CommentDTO(String commentContents,int postId,int userId ) {}
     public int getUserId() {
         return userId;
     }

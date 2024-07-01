@@ -1,8 +1,11 @@
 package gui.component.post;
 
+import config.SessionManager;
 import dao.CommentDAO;
+import dao.UserDAO;
 import dto.CommentComponentDTO;
 import dto.CommentDTO;
+import dto.UserDTO;
 import gui.component.global.CustomStyle;
 import gui.component.buttons.*;
 import gui.component.comment.Comment;
@@ -11,15 +14,23 @@ import gui.component.global.Header;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
+import java.sql.Date;
 import java.util.ArrayList;
 
 public class PostRead extends JFrame {
     ArrayList<Comment> comments;
+
+    public ArrayList<Comment> createCommentsList() {
+        comments.clear();
+        // 해당 게시글 번호를 참조한 댓글 리스트로 댓글 생성
+        for (CommentDTO comment : CommentDAO.listComment(30)) {
+            comments.add(new Comment(comment));
+        }
+        return comments;
+    }
     public PostRead(){
+        comments = new ArrayList<>();
         setLayout(new BorderLayout());
         UIManager.put("TextArea.inactiveForeground", Color.BLACK);//TextArea enabled(false)인 상태에서도 글씨색 그대로
         //S: header
@@ -176,6 +187,7 @@ public class PostRead extends JFrame {
         defaultLabel.setFont(CustomStyle.setCutomFont(16, 'n'));
         commentTotalArea.add(defaultLabel);
 
+
         JLabel commentNumLabel = new JLabel("234");
         commentNumLabel.setForeground(CustomStyle.mainColor);
         commentNumLabel.setFont(CustomStyle.setCutomFont(16, 'b'));
@@ -263,7 +275,22 @@ public class PostRead extends JFrame {
         commentWriteBottom.add(commentWriteButton, BorderLayout.EAST);
         commentWriteButton.addMouseListener(new MouseListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {}
+            public void mouseClicked(MouseEvent e) {
+                UserDTO userDTO = UserDAO.selectByNickName(SessionManager.getCurrentUser());
+                int userId = userDTO.getUserId();
+                System.out.println("userId = " + userId);
+                String contents=commentWriteField.getText();
+                System.out.println("contents = " + contents);
+                CommentDTO commentDTO = new CommentDTO();
+                commentDTO.setCommentContents(contents);
+                commentDTO.setPostId(30);
+                commentDTO.setUserId(userId);
+                int re=CommentDAO.insertComment(commentDTO);
+                System.out.println(re);
+                commentWriteField.setText(null);
+                createCommentsList();
+                repaint();
+            }
 
             @Override
             public void mousePressed(MouseEvent e) {
@@ -300,19 +327,19 @@ public class PostRead extends JFrame {
         commentListWrap.setBackground(CustomStyle.white);
         commentList.add(commentListWrap);
 
-        comments = new ArrayList<>();
-
-        // 해당 게시글 번호를 참조한 댓글 리스트로 댓글 생성
-        for (CommentDTO comment : CommentDAO.listComment(30)) {
-            comments.add(new Comment(comment));
-            System.out.println("comment = " + comment);
-        }
-
+//        comments = new ArrayList<>();
+//
+//        // 해당 게시글 번호를 참조한 댓글 리스트로 댓글 생성
+//        for (CommentDTO comment : CommentDAO.listComment(30)) {
+//            comments.add(new Comment(comment));
+//            System.out.println("comment = " + comment);
+//        }
+        createCommentsList();
         comments.stream().forEach(
                 item -> commentListWrap.add(item)
         );
-        //E: commentListWrap
-        //S: commentPagenation
+//        //E: commentListWrap
+//        //S: commentPagenation
 
         Pagenation commentPagenation = new Pagenation(24);
         commentList.add(commentPagenation, BorderLayout.SOUTH);

@@ -82,8 +82,6 @@ public class Comment extends JPanel {
         commentTxtWrap.add(commentTxt,BorderLayout.CENTER);
 
         if (nickname.equals(SessionManager.getCurrentUser())){
-            System.out.println("유저 닉네임 확인 : "+nickname);
-            System.out.println("Curren User : "+SessionManager.getCurrentUser());
             JButton editButton = new JButton("수정");
             editButton.setBackground(CustomStyle.white);
             editButton.setFont(CustomStyle.setCutomFont(13,'n'));
