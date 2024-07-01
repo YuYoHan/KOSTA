@@ -2,17 +2,14 @@ package gui.component.comment;
 
 import config.SessionManager;
 import gui.CustomStyle;
-import gui.component.post.PostRead;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 
-public class CommentItem extends JPanel {
+public class Comment extends JPanel {
     JTextArea commentTxt;
-    public CommentItem(String nickname, String date, String txt){
+    public Comment(String nickname, String date, String txt){
 
         setBackground(CustomStyle.white);
         setBorder(BorderFactory.createMatteBorder(0,0,1,0, CustomStyle.borderColor)

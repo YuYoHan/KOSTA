@@ -4,7 +4,7 @@ import dao.CommentDAO;
 import dto.CommentComponentDTO;
 import gui.CustomStyle;
 import gui.component.buttons.*;
-import gui.component.comment.CommentItem;
+import gui.component.comment.Comment;
 import gui.component.global.Header;
 
 import javax.swing.*;
@@ -17,7 +17,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 public class PostRead extends JFrame {
-    ArrayList<CommentItem> commentItems;
+    ArrayList<Comment> comments;
     PostRead(){
         setLayout(new BorderLayout());
         UIManager.put("TextArea.inactiveForeground", Color.BLACK);//TextArea enabled(false)인 상태에서도 글씨색 그대로
@@ -299,14 +299,14 @@ public class PostRead extends JFrame {
         commentListWrap.setBackground(CustomStyle.white);
         commentList.add(commentListWrap);
 
-        commentItems = new ArrayList<>();
+        comments = new ArrayList<>();
 
         // 해당 게시글 번호를 참조한 댓글 리스트로 댓글 생성
         for (CommentComponentDTO comment : CommentDAO.getComments(30)) {
-            commentItems.add(new CommentItem(comment.getNickname(), comment.getRegDate().toLocalDate()+"", comment.getContents()));
+            comments.add(new Comment(comment.getNickname(), comment.getRegDate().toLocalDate()+"", comment.getContents()));
         }
 
-        commentItems.stream().forEach(
+        comments.stream().forEach(
                 item -> commentListWrap.add(item)
         );
         //E: commentListWrap
@@ -339,7 +339,7 @@ public class PostRead extends JFrame {
                 //E: comment TextField 크기 변경
 
                 //S: comment 내용 크기 변경
-                commentItems.stream().forEach(
+                comments.stream().forEach(
                         item -> item.setCommentWidth(frameSize.width)
                 );
                 //E: comment 내용 크기 변경
