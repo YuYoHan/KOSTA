@@ -5,6 +5,8 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -164,7 +166,30 @@ public class PostList extends JFrame{
 			}
 		});
 		//E: Search Table
+		//S: table click PostRead
+		table.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int idx = table.getSelectedRow();
+				Vector<String> row= rowData.get(idx);
+				int postId = Integer.parseInt(row.getFirst());
+				PostResponseDTO postDTO = PostDAO.getPostReadDTO(postId);
+				new PostRead(postDTO);
+			}
 
+			@Override
+			public void mousePressed(MouseEvent e) {}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+
+			@Override
+			public void mouseExited(MouseEvent e) {}
+		});
+		//E: table click PostRead
 		//S: JFrame Setting
 		setSize(1440, 800);
 		setVisible(true);

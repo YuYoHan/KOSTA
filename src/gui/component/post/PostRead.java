@@ -5,6 +5,7 @@ import dao.CommentDAO;
 import dao.UserDAO;
 import dto.CommentComponentDTO;
 import dto.CommentDTO;
+import dto.PostResponseDTO;
 import dto.UserDTO;
 import gui.component.global.CustomStyle;
 import gui.component.buttons.*;
@@ -16,11 +17,22 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class PostRead extends JFrame {
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private DefaultButton toListButton;
+    private DefaultButton toPostEdit;
+    private DangerButton toPostDelete;
+    private PostResponseDTO postDTO;
+
     ArrayList<Comment> comments;
     String commentCnt;
+
+    public PostResponseDTO getPostDTO() {
+        return postDTO;
+    }
 
     public ArrayList<Comment> createCommentsList() {
         comments.clear();
@@ -30,7 +42,7 @@ public class PostRead extends JFrame {
         }
         return comments;
     }
-    public PostRead(){
+    public PostRead(PostResponseDTO postDTO){
         comments = new ArrayList<>();
         setLayout(new BorderLayout());
         UIManager.put("TextArea.inactiveForeground", Color.BLACK);//TextArea enabled(false)인 상태에서도 글씨색 그대로
@@ -45,7 +57,6 @@ public class PostRead extends JFrame {
         //S: body
         JScrollPane bodyScrollWrap = new JScrollPane();
         bodyScrollWrap.setBorder(null);
-        //bodyScrollWrap.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         bodyScrollWrap.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         bodyScrollWrap.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -86,7 +97,7 @@ public class PostRead extends JFrame {
         postTitleContent.setLayout(new GridLayout(2,1));
         postTitleArea.add(postTitleContent);
 
-        JTextArea postTitle = new JTextArea("이번 사태를 보면서 느낀 점 한가지가 있음. 이 제목이 길어지면 자연스럽게 텍스트가 내려가야함.이번 사태를 보면서 느낀 점 한가지가 있음. 이 제목이 길어지면 자연스럽게 텍스트가 내려가야함.");
+        JTextArea postTitle = new JTextArea(postDTO.getPostTitle());
         postTitle.setBackground(new Color(247, 247, 250));
         postTitle.setLineWrap(true);
         postTitle.setWrapStyleWord(true);
@@ -101,11 +112,11 @@ public class PostRead extends JFrame {
         etcPostInfo.setBackground(CustomStyle.transparency);
         postTitleContent.add(etcPostInfo);
 
-        JLabel nickname = new JLabel("뜨거운 감자가 조아");
+        JLabel nickname = new JLabel(postDTO.getNickname());
         nickname.setFont(CustomStyle.setCutomFont(16, 'n'));
         nickname.setForeground(CustomStyle.black50);
         etcPostInfo.add(nickname);
-        JLabel postWriteDate = new JLabel("2023.12.20");
+        JLabel postWriteDate = new JLabel(dateFormat.format(postDTO.getPostRegTime()));
         postWriteDate.setFont(CustomStyle.setCutomFont(16, 'n'));
         postWriteDate.setForeground(CustomStyle.black50);
         postWriteDate.setBorder(new EmptyBorder(0, 8, 0, 0));
@@ -128,19 +139,7 @@ public class PostRead extends JFrame {
         postContent.add(postContentWrap, BorderLayout.CENTER);
 
         
-        JTextArea postContentTxt = new JTextArea("대통령은 법률이 정하는 바에 의하여 훈장 기타의 영전을 수여한다. 비상계엄하의 군사재판은 군인·군무원의 범죄나 군사에 관한 간첩죄의 경우와 초병·초소·유독음식물공급·포로에 관한 죄중 법률이 정한 경우에 한하여 단심으로 할 수 있다. 다만, 사형을 선고한 경우에는 그러하지 아니하다." +
-                "헌법재판소의 장은 국회의 동의를 얻어 재판관중에서 대통령이 임명한다. 군인 또는 군무원이 아닌 국민은 대한민국의 영역안에서는 중대한 군사상 기밀·초병·초소·유독음식물공급·포로·군용물에 관한 죄중 법률이 정한 경우와 비상계엄이 선포된 경우를 제외하고는 군사법원의 재판을 받지 아니한다." +
-                "\n\n" +
-                "대통령은 법률이 정하는 바에 의하여 훈장 기타의 영전을 수여한다. 비상계엄하의 군사재판은 군인·군무원의 범죄나 군사에 관한 간첩죄의 경우와 초병·초소·유독음식물공급·포로에 관한 죄중 법률이 정한 경우에 한하여 단심으로 할 수 있다. 다만, 사형을 선고한 경우에는 그러하지 아니하다." +
-                "헌법재판소의 장은 국회의 동의를 얻어 재판관중에서 대통령이 임명한다. 군인 또는 군무원이 아닌 국민은 대한민국의 영역안에서는 중대한 군사상 기밀·초병·초소·유독음식물공급·포로·군용물에 관한 죄중 법률이 정한 경우와 비상계엄이 선포된 경우를 제외하고는 군사법원의 재판을 받지 아니한다." +
-                "대통령은 법률이 정하는 바에 의하여 훈장 기타의 영전을 수여한다. 비상계엄하의 군사재판은 군인·군무원의 범죄나 군사에 관한 간첩죄의 경우와 초병·초소·유독음식물공급·포로에 관한 죄중 법률이 정한 경우에 한하여 단심으로 할 수 있다. 다만, 사형을 선고한 경우에는 그러하지 아니하다." +
-                "\n\n" +
-                "헌법재판소의 장은 국회의 동의를 얻어 재판관중에서 대통령이 임명한다. 군인 또는 군무원이 아닌 국민은 대한민국의 영역안에서는 중대한 군사상 기밀·초병·초소·유독음식물공급·포로·군용물에 관한 죄중 법률이 정한 경우와 비상계엄이 선포된 경우를 제외하고는 군사법원의 재판을 받지 아니한다." +
-                "대통령은 법률이 정하는 바에 의하여 훈장 기타의 영전을 수여한다. 비상계엄하의 군사재판은 군인·군무원의 범죄나 군사에 관한 간첩죄의 경우와 초병·초소·유독음식물공급·포로에 관한 죄중 법률이 정한 경우에 한하여 단심으로 할 수 있다. 다만, 사형을 선고한 경우에는 그러하지 아니하다." +
-                "헌법재판소의 장은 국회의 동의를 얻어 재판관중에서 대통령이 임명한다. 군인 또는 군무원이 아닌 국민은 대한민국의 영역안에서는 중대한 군사상 기밀·초병·초소·유독음식물공급·포로·군용물에 관한 죄중 법률이 정한 경우와 비상계엄이 선포된 경우를 제외하고는 군사법원의 재판을 받지 아니한다." +
-                "\n\n" +
-                "대통령은 법률이 정하는 바에 의하여 훈장 기타의 영전을 수여한다. 비상계엄하의 군사재판은 군인·군무원의 범죄나 군사에 관한 간첩죄의 경우와 초병·초소·유독음식물공급·포로에 관한 죄중 법률이 정한 경우에 한하여 단심으로 할 수 있다. 다만, 사형을 선고한 경우에는 그러하지 아니하다." +
-                "헌법재판소의 장은 국회의 동의를 얻어 재판관중에서 대통령이 임명한다. 군인 또는 군무원이 아닌 국민은 대한민국의 영역안에서는 중대한 군사상 기밀·초병·초소·유독음식물공급·포로·군용물에 관한 죄중 법률이 정한 경우와 비상계엄이 선포된 경우를 제외하고는 군사법원의 재판을 받지 아니한다.");
+        JTextArea postContentTxt = new JTextArea(postDTO.getPostContents());
         postContentTxt.setLineWrap(true);
         postContentTxt.setWrapStyleWord(true);
 
@@ -163,12 +162,16 @@ public class PostRead extends JFrame {
 
         DefaultButton toListButton = new DefaultButton("            목록으로            ");
         postBottomButtons.add(toListButton);
-
-        //S: 포스트 작성자가 글을 조회했을때 보이는 버튼들
         DefaultButton toPostEdit = new DefaultButton("           게시글 수정           ");
         postBottomButtons.add(toPostEdit);
         DangerButton toPostDelete = new DangerButton("           게시글 삭제           ");
         postBottomButtons.add(toPostDelete);
+
+        //S: 포스트 작성자가 글을 조회했을때 보이는 버튼들
+        if(!(SessionManager.getCurrentUser().equals(postDTO.getNickname()))){
+            toPostEdit.setVisible(false);
+            toPostDelete.setVisible(false);
+        }
         //E: 포스트 작성자가 글을 조회했을때 보이는 버튼들
 
         //E: PostAllowButtons
@@ -375,12 +378,5 @@ public class PostRead extends JFrame {
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         //E: JFrame Setting
-    }
-    
-
-
-
-    public static void main(String[] args) {
-        new PostRead();
     }
 }

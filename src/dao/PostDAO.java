@@ -90,4 +90,40 @@ public class PostDAO {
         //위에서 만든 ArrayList 반환
         return result;
     }
+
+    //한 개의 포스트 조회
+    public static PostResponseDTO getPostReadDTO(int postId){
+        PostResponseDTO postDTO = new PostResponseDTO();
+        try{
+            connection = JDBCConfig.getConnection();
+            String sql = "select POST_ID, POST_TITLE, (" +
+                    "    select NICKNAME from USERS" +
+                    "    where USERS.USER_ID = POST.USER_ID" +
+                    ") NICKNAME, POST_REGTIME, POST_CONTENTS " +
+                    "from POST " +
+                    "where POST_ID = ?";
+
+            //S: 작업 1 - pstmt 에서 작업 조회 시도하여 ResultSet 으로 가져온다
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, postId);
+            rs = preparedStatement.executeQuery();
+            //E: 작업 1
+
+            //S: 작업 2 - PostDTO를 구성으로 가진 ArrayList를 만든다.
+            if(rs.next()){
+                postDTO.setPostId(rs.getInt("post_id"));
+                postDTO.setNickname(rs.getString("nickname"));
+                postDTO.setPostTitle(rs.getString("post_title"));
+                postDTO.setPostContents(rs.getString("post_contents"));
+                postDTO.setPostRegTime(rs.getTimestamp("post_regtime"));
+            }
+            //E: 작업 2
+        }catch (Exception e){
+            System.out.println(e);
+            e.printStackTrace();
+        }finally {
+            JDBCConfig.close(rs, preparedStatement, connection);
+        }
+        return postDTO;
+    }
 }
