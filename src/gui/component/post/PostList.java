@@ -15,7 +15,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
-import dto.PostRequestDTO;
+import dto.PostResponseDTO;
 import gui.component.global.CustomStyle;
 import gui.component.global.CustomStyle.DrowSquare;
 import gui.component.buttons.DefaultButton;
@@ -91,13 +91,13 @@ public class PostList extends JFrame{
 //			row.add("흠");
 //			rowData.add(row);
 //		}
-		List<PostRequestDTO> posts = selectAll(); // selectAll() 메서드 호출
+		List<PostResponseDTO> posts = selectAll(); // selectAll() 메서드 호출
 		Vector<Vector<String>> rowData = new Vector<>();
-		for (PostRequestDTO post : posts) {
+		for (PostResponseDTO post : posts) {
 			Vector<String> row = new Vector<>();
 			row.add(String.valueOf(post.getPostId()));
 			row.add(post.getPostTitle());
-			row.add(String.valueOf(post.getUserId()));
+			row.add(String.valueOf(post.getNickname()));
 			row.add(String.valueOf(post.getPostRegTime()));
 			rowData.add(row);
 		}

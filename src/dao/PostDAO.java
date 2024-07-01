@@ -2,6 +2,7 @@ package dao;
 
 import config.JDBCConfig;
 import dto.PostRequestDTO;
+import dto.PostResponseDTO;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -20,18 +21,19 @@ public class PostDAO {
     }
 
     // 게시물 전체 조회
-    public static List<PostRequestDTO> selectAll(){
-        String sql = "SELECT * FROM post";
-        List<PostRequestDTO> posts = new ArrayList<>();
+    public static List<PostResponseDTO> selectAll(){
+        String sql = "SELECT * FROM post, users where users.user_id= post.user_id";
+        List<PostResponseDTO> posts = new ArrayList<>();
         try {
             connection = JDBCConfig.getConnection();
             preparedStatement = connection.prepareStatement(sql);
             rs = preparedStatement.executeQuery();
             while(rs.next()) {
-                PostRequestDTO post = new PostRequestDTO();
+                PostResponseDTO post = new PostResponseDTO();
+                post.setPostId(rs.getInt("post_id"));
                 post.setPostTitle(rs.getString("post_title"));
                 post.setPostContents(rs.getString("post_contents"));
-                post.setUserId(rs.getInt("user_id"));
+                post.setNickname(rs.getString("nickname"));
                 post.setPostRegTime(rs.getTimestamp("post_regtime").toLocalDateTime());
                 posts.add(post);
             }
