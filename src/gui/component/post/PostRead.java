@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 public class PostRead extends JFrame {
     ArrayList<CommentItem> commentItems;
-    PostRead(){
+    public PostRead(){
         setLayout(new BorderLayout());
         UIManager.put("TextArea.inactiveForeground", Color.BLACK);//TextArea enabled(false)인 상태에서도 글씨색 그대로
         //S: header
