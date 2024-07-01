@@ -1,7 +1,10 @@
 package gui.component.post;
 
-import gui.component.global.CustomStyle;
+import config.SessionManager;
+import dao.PostDAO;
+import dto.PostResponseDTO;
 import gui.Index;
+import gui.component.global.CustomStyle;
 import gui.component.buttons.DefaultButton;
 import gui.component.buttons.PrimaryButton;
 import gui.component.global.Header;
@@ -21,8 +24,12 @@ public class CreatePost extends JFrame {
     private HintTextField titleField;
     private HintTextArea contentField;
 
+
+
     public CreatePost(JFrame mainPage) {
         Header header = new Header(this);
+        header.getButtonLogin().setVisible(false);
+        header.getButtonSignUp().setVisible(false);
         add(header, BorderLayout.NORTH);
 
         // panel 에 제목 panel2에 내용, panel3에 버튼
@@ -94,7 +101,6 @@ public class CreatePost extends JFrame {
         // JFrame 설정
         setSize(1440, 800);
         setVisible(true);
-        mainPage.setVisible(false);
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -102,13 +108,23 @@ public class CreatePost extends JFrame {
                 contentField.setSize(frameSize.width - (CustomStyle.DISPLAY_MARGIN*2 + 48), 20);
             }
         });
+
+        //포스터 등록 버튼
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String title = titleField.getText();
-
+                System.out.println(SessionManager.getCurrentUser());
+                PostResponseDTO postResponseDTO = new PostResponseDTO();
+                postResponseDTO.setPostTitle(titleField.getText());
+                postResponseDTO.setPostContents(contentField.getText());
+                postResponseDTO.setNickname(SessionManager.getCurrentUser());
+                PostDAO.postWrite(postResponseDTO);
+                dispose();
+                new PostList();
             }
         });
+
+        //취소버튼
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -116,11 +132,21 @@ public class CreatePost extends JFrame {
                 mainPage.setVisible(true);  // 메인 창으로 복귀
             }
         });
-
     }
-    public static void main(String[] args){
-        new CreatePost(new Index());
+    public HintTextField getTitleField(){
+        return titleField;
+    }
+    public HintTextArea getContentField(){
+        return contentField;
+    }
 
+    public void setContentField(String contentsTxt) {
+        this.contentField.setText(contentsTxt);
+    }
+
+    public void setTitleField(String titleTxt){
+        this.titleField.setText(titleTxt);
     }
 }
+
 

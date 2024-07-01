@@ -127,7 +127,46 @@ public class PostDAO {
         }
         return postDTO;
     }
+    // 포스트 등록 - RequestPostDTO 를 반환.
+    public static int postWrite(PostResponseDTO postResponseDTO){
+        int resultNum = 0;
+        try{
+            connection = JDBCConfig.getConnection();
+            connection.setAutoCommit(false);
+            String sql = "INSERT INTO POST(POST_ID, POST_TITLE, POST_CONTENTS, POST_REGTIME, USER_ID) " +
+                    "VALUES (POST_ID_SEQ.NEXTVAL+30, ?, ?, sysdate, (SELECT USER_ID FROM USERS WHERE NICKNAME = ?))";
 
+            //S: 작업 1 - 현재 로그인한 사람
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, postResponseDTO.getPostTitle());
+            preparedStatement.setString(2, postResponseDTO.getPostContents());
+            preparedStatement.setString(3, postResponseDTO.getNickname());
+            System.out.println(sql);
+            resultNum = preparedStatement.executeUpdate();
+            System.out.println(resultNum);
+            //E: 작업 1
+
+            //S: 작업 2 - resultNum 으로 작업 실패 및 성공 판단
+            if(resultNum == 1) {
+                connection.commit();
+            }else{
+                connection.rollback();
+                JOptionPane.showMessageDialog(null, "포스터 작성 실패 : 변경 값 = "+ resultNum);
+            }
+            //E: 작업 2
+        }catch (Exception e){
+            System.out.println(e);
+            e.printStackTrace();
+        }finally {
+            JDBCConfig.close(preparedStatement, connection);
+            try {
+                connection.setAutoCommit(true);
+            }catch (Exception e){
+                System.out.println(e);
+            }
+        }
+        return resultNum;
+    }
     // 포스트 수정
     public static int postUpdate(int postId, String postTitle, String postContent){
         int resultNum = 0;
