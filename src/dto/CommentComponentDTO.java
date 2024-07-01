@@ -6,7 +6,6 @@ public class CommentComponentDTO {
     private String nickname;
     private LocalDateTime regDate;
     private String contents;
-    private int userId;
 
     public CommentComponentDTO() {
 
@@ -17,7 +16,6 @@ public class CommentComponentDTO {
                 "nickname='" + nickname + '\'' +
                 ", regDate=" + regDate +
                 ", contents='" + contents + '\'' +
-                ", userId=" + userId +
                 '}';
     }
 
@@ -45,18 +43,9 @@ public class CommentComponentDTO {
         this.contents = contents;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public CommentComponentDTO(String nickname, LocalDateTime regDate, String contents, int userId) {
+    public CommentComponentDTO(String nickname, LocalDateTime regDate, String contents) {
         this.nickname = nickname;
         this.regDate = regDate;
         this.contents = contents;
-        this.userId = userId;
     }
 }
