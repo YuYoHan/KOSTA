@@ -122,7 +122,7 @@ public class UserDAO {
     }
 
     // DB에 등록, 수정, 삭제하는 메서드
-    private static int connectDB(String sql, Object... params) {
+    public static int connectDB(String sql, Object... params) {
         try {
             connection = JDBCConfig.getConnection();
             preparedStatement = connection.prepareStatement(sql);
