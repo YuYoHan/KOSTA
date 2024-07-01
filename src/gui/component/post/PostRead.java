@@ -2,6 +2,7 @@ package gui.component.post;
 
 import dao.CommentDAO;
 import dto.CommentComponentDTO;
+import dto.CommentDTO;
 import gui.component.global.CustomStyle;
 import gui.component.buttons.*;
 import gui.component.comment.Comment;
@@ -302,8 +303,9 @@ public class PostRead extends JFrame {
         comments = new ArrayList<>();
 
         // 해당 게시글 번호를 참조한 댓글 리스트로 댓글 생성
-        for (CommentComponentDTO comment : CommentDAO.getComments(30)) {
-            comments.add(new Comment(comment.getNickname(), comment.getRegDate().toLocalDate()+"", comment.getContents()));
+        for (CommentDTO comment : CommentDAO.listComment(30)) {
+            comments.add(new Comment(comment));
+            System.out.println("comment = " + comment);
         }
 
         comments.stream().forEach(
