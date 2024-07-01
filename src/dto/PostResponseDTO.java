@@ -1,12 +1,13 @@
 package dto;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 public class PostResponseDTO {
     private int postId;
     private String nickname;
     private String postContents;
-    private LocalDateTime postRegTime;
+    private Date postRegTime;
     private String postTitle;
 
     public int getPostId() {
@@ -33,11 +34,11 @@ public class PostResponseDTO {
         this.postContents = postContents;
     }
 
-    public LocalDateTime getPostRegTime() {
+    public Date getPostRegTime() {
         return postRegTime;
     }
 
-    public void setPostRegTime(LocalDateTime postRegTime) {
+    public void setPostRegTime(Date postRegTime) {
         this.postRegTime = postRegTime;
     }
 

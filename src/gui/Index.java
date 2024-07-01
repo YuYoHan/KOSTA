@@ -5,6 +5,8 @@ import gui.component.buttons.PrimaryButton;
 import gui.component.global.CustomStyle;
 import gui.component.global.Footer;
 import gui.component.global.Header;
+import gui.component.post.CreatePost;
+import gui.component.user.Login;
 import gui.component.user.SignUp;
 
 import javax.swing.*;
@@ -14,8 +16,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Index extends JFrame {
+    public String pBtnName = "지금 가입하기";
 
     public Index() {
+        String signNow="지금 가입하기";
+        String posting = "방명록 작성하기";
+        pBtnName=signNow;
         // 메인 패널 생성
         JPanel mainPanel = new JPanel();
         // JLabel을 JPanel에 담기위한 패널
@@ -43,9 +49,27 @@ public class Index extends JFrame {
             headerPanel.getButtonPostList().setVisible(true);
             headerPanel.getButtonLogin().setVisible(false);
             headerPanel.getButtonSignUp().setVisible(false);
+            // 회원가입버튼 / 게시물 작성 버튼
+            pBtnName=posting;
         }
 
-         //푸터 패널 생성
+        PrimaryButton mainSignupBtn = new PrimaryButton(pBtnName);
+        // 지금 가입하기 버튼 기능
+        JFrame page=this;
+        mainSignupBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(pBtnName.equals(signNow)) {
+                    new SignUp(page);
+                }else {
+                    new CreatePost(page);
+                }
+            }
+        });
+
+
+
+        //푸터 패널 생성
         Footer footerPanel = new Footer();
 
         // 메인 이미지 패널에 담기
@@ -86,12 +110,7 @@ public class Index extends JFrame {
         textLb.setIcon(changeTextIcon);
         textLb.setBorder(new EmptyBorder(35,0,35,0));
 
-        // 회원가입버튼 / 게시물 작성 버튼
-        String pBtnName = "지금 가입하기";
-        if (SessionManager.getCurrentUser() != null) {
-            pBtnName="게시물 작성";
-        }
-        PrimaryButton mainSignupBtn = new PrimaryButton(pBtnName);
+
 
         // 버튼 배경 색깔 수정
         mainSignupBtn.setBackground(Color.white);
@@ -140,14 +159,6 @@ public class Index extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        // 지금 가입하기 버튼 기능
-        JFrame page=this;
-        mainSignupBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new SignUp(page);
-            }
-        });
 
     }
 

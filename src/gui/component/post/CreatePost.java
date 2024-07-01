@@ -94,6 +94,7 @@ public class CreatePost extends JFrame {
         // JFrame 설정
         setSize(1440, 800);
         setVisible(true);
+        mainPage.setVisible(false);
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {

@@ -3,6 +3,10 @@ package gui.component.post;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -15,6 +19,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import dao.PostDAO;
 import dto.PostResponseDTO;
 import gui.component.global.CustomStyle;
 import gui.component.global.CustomStyle.DrowSquare;
@@ -27,6 +32,10 @@ import gui.component.input.RoundInput;
 import static dao.PostDAO.selectAll;
 
 public class PostList extends JFrame{
+	private JTable table;
+	private Vector<Vector<String>> rowData = new Vector<>();
+	private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
 	PostList(){
 		//S:header
 		Header header = new Header(this);
@@ -81,16 +90,6 @@ public class PostList extends JFrame{
 		columnName.add("제목");
 		columnName.add("작성자");
 		columnName.add("작성일");
-//		Vector<Vector<String>> rowData = new Vector<>();
-//		int testNum = 0;
-//		while(testNum++ < 100) {
-//			Vector<String> row = new Vector<String>();
-//			row.add(testNum+"");
-//			row.add("테스트하는중..");
-//			row.add("테스트");
-//			row.add("흠");
-//			rowData.add(row);
-//		}
 		List<PostResponseDTO> posts = selectAll(); // selectAll() 메서드 호출
 		Vector<Vector<String>> rowData = new Vector<>();
 		for (PostResponseDTO post : posts) {
@@ -98,7 +97,7 @@ public class PostList extends JFrame{
 			row.add(String.valueOf(post.getPostId()));
 			row.add(post.getPostTitle());
 			row.add(String.valueOf(post.getNickname()));
-			row.add(String.valueOf(post.getPostRegTime()));
+			row.add(dateFormat.format(post.getPostRegTime()));
 			rowData.add(row);
 		}
 		table = new JTable(rowData, columnName);
@@ -140,7 +139,32 @@ public class PostList extends JFrame{
 		PrimaryButton buttonSearch = new PrimaryButton("검색");
 		tableSearchArea.add(buttonSearch);
 		//E: tableBottomArea
-		
+
+		//S: Search Table
+		buttonSearch.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				rowData.clear();
+				String searchTxt = searchInput.input.getText();
+				ArrayList<PostResponseDTO> searchResult = PostDAO.searchPostByTitleNickname(searchTxt);
+				//System.out.println(searchResult);
+				searchResult.forEach(
+						dto ->{
+							Vector<String> row = new Vector<>();
+							row.add(dto.getPostId()+"");
+							row.add(dto.getPostTitle());
+							row.add(dto.getNickname());
+							row.add(dateFormat.format(dto.getPostRegTime()));
+							rowData.add(row);
+						}
+				);
+				table.updateUI();
+				searchInput.input.setText("");
+			}
+		});
+		//E: Search Table
+
 		//S: JFrame Setting
 		setSize(1440, 800);
 		setVisible(true);

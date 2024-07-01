@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 public class PostRead extends JFrame {
     ArrayList<Comment> comments;
+    String commentCnt;
 
     public ArrayList<Comment> createCommentsList() {
         comments.clear();
@@ -187,8 +188,11 @@ public class PostRead extends JFrame {
         defaultLabel.setFont(CustomStyle.setCutomFont(16, 'n'));
         commentTotalArea.add(defaultLabel);
 
+        // 해당 게시글 번호를 참조한 댓글 리스트로 댓글 생성
+        createCommentsList();
+        commentCnt=comments.size()+"";
 
-        JLabel commentNumLabel = new JLabel("234");
+        JLabel commentNumLabel = new JLabel(commentCnt);
         commentNumLabel.setForeground(CustomStyle.mainColor);
         commentNumLabel.setFont(CustomStyle.setCutomFont(16, 'b'));
         commentTotalArea.add(commentNumLabel);
@@ -327,14 +331,6 @@ public class PostRead extends JFrame {
         commentListWrap.setBackground(CustomStyle.white);
         commentList.add(commentListWrap);
 
-//        comments = new ArrayList<>();
-//
-//        // 해당 게시글 번호를 참조한 댓글 리스트로 댓글 생성
-//        for (CommentDTO comment : CommentDAO.listComment(30)) {
-//            comments.add(new Comment(comment));
-//            System.out.println("comment = " + comment);
-//        }
-        createCommentsList();
         comments.stream().forEach(
                 item -> commentListWrap.add(item)
         );

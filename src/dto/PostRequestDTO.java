@@ -7,7 +7,7 @@ public class PostRequestDTO {
     private int postId;
     private int userId;
     private String postContents;
-    private LocalDateTime postRegTime;
+    private Date postRegTime;
     private String postTitle;
 
     public int getPostId() {
@@ -34,11 +34,11 @@ public class PostRequestDTO {
         this.postContents = postContents;
     }
 
-    public LocalDateTime getPostRegTime() {
+    public Date getPostRegTime() {
         return postRegTime;
     }
 
-    public void setPostRegTime(LocalDateTime postRegTime) {
+    public void setPostRegTime(Date postRegTime) {
         this.postRegTime = postRegTime;
     }
 
