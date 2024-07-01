@@ -38,7 +38,9 @@ public class Comment extends JPanel {
         commentButtonWrap.setLayout(new FlowLayout(FlowLayout.RIGHT));
         topWrap.add(commentButtonWrap);
 
-        if (nickname==SessionManager.getCurrentUser()){
+        if (nickname.equals(SessionManager.getCurrentUser())){
+            System.out.println("유저 닉네임 확인 : "+nickname);
+            System.out.println("Curren User : "+SessionManager.getCurrentUser());
             JButton editButton = new JButton("수정");
             editButton.setBackground(CustomStyle.white);
             editButton.setFont(CustomStyle.setCutomFont(13,'n'));
