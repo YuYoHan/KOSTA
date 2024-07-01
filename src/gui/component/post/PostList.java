@@ -3,6 +3,7 @@ package gui.component.post;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.JFrame;
@@ -14,6 +15,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import dto.PostRequestDTO;
 import gui.component.global.CustomStyle;
 import gui.component.global.CustomStyle.DrowSquare;
 import gui.component.buttons.DefaultButton;
@@ -21,6 +23,8 @@ import gui.component.buttons.Pagenation;
 import gui.component.buttons.PrimaryButton;
 import gui.component.global.Header;
 import gui.component.input.RoundInput;
+
+import static dao.PostDAO.selectAll;
 
 public class PostList extends JFrame{
 	PostList(){
@@ -76,15 +80,25 @@ public class PostList extends JFrame{
 		columnName.add("No");
 		columnName.add("제목");
 		columnName.add("작성자");
-		columnName.add("열1");
+		columnName.add("작성일");
+//		Vector<Vector<String>> rowData = new Vector<>();
+//		int testNum = 0;
+//		while(testNum++ < 100) {
+//			Vector<String> row = new Vector<String>();
+//			row.add(testNum+"");
+//			row.add("테스트하는중..");
+//			row.add("테스트");
+//			row.add("흠");
+//			rowData.add(row);
+//		}
+		List<PostRequestDTO> posts = selectAll(); // selectAll() 메서드 호출
 		Vector<Vector<String>> rowData = new Vector<>();
-		int testNum = 0;
-		while(testNum++ < 100) {
-			Vector<String> row = new Vector<String>();  
-			row.add(testNum+"");
-			row.add("테스트하는중..");
-			row.add("테스트");
-			row.add("흠");
+		for (PostRequestDTO post : posts) {
+			Vector<String> row = new Vector<>();
+			row.add(String.valueOf(post.getPostId()));
+			row.add(post.getPostTitle());
+			row.add(String.valueOf(post.getUserId()));
+			row.add(String.valueOf(post.getPostRegTime()));
 			rowData.add(row);
 		}
 		table = new JTable(rowData, columnName);
