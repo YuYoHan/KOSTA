@@ -43,6 +43,7 @@ public class PostRead extends JFrame {
         return comments;
     }
     public PostRead(PostResponseDTO postDTO){
+        this.postDTO = postDTO;
         comments = new ArrayList<>();
         setLayout(new BorderLayout());
         UIManager.put("TextArea.inactiveForeground", Color.BLACK);//TextArea enabled(false)인 상태에서도 글씨색 그대로
@@ -82,6 +83,14 @@ public class PostRead extends JFrame {
         buttonArea.setLayout(new FlowLayout(FlowLayout.LEFT));
         postArea.add(buttonArea, BorderLayout.NORTH);
         RoundButtons buttonBack = new TextButton("< 뒤로가기");
+        // 뒤로가기 버튼
+        buttonBack.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                new PostList();
+            }
+        });
         buttonArea.setBackground(CustomStyle.white);
         buttonArea.add(buttonBack);
         body.add(buttonArea, BorderLayout.NORTH);
@@ -160,11 +169,21 @@ public class PostRead extends JFrame {
         postBottomButtons.setBorder(new EmptyBorder(24, 24, 28, 24));
         postButtonsArea.add(postBottomButtons);
 
-        DefaultButton toListButton = new DefaultButton("            목록으로            ");
+        toListButton = new DefaultButton("            목록으로            ");
         postBottomButtons.add(toListButton);
-        DefaultButton toPostEdit = new DefaultButton("           게시글 수정           ");
+
+        // 목록으로 버튼
+        toListButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                new PostList();
+            }
+        });
+
+        toPostEdit = new DefaultButton("           게시글 수정           ");
         postBottomButtons.add(toPostEdit);
-        DangerButton toPostDelete = new DangerButton("           게시글 삭제           ");
+        toPostDelete = new DangerButton("           게시글 삭제           ");
         postBottomButtons.add(toPostDelete);
 
         //S: 포스트 작성자가 글을 조회했을때 보이는 버튼들

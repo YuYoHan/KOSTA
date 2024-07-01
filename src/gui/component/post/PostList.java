@@ -38,10 +38,11 @@ public class PostList extends JFrame{
 	private Vector<Vector<String>> rowData = new Vector<>();
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-	PostList(){
+	public PostList(){
 		//S:header
 		Header header = new Header(this);
-		header.getButtonLogout().setVisible(false);
+		header.getButtonLogin().setVisible(false);
+		header.getButtonLogout().setVisible(true);
 		header.getButtonSignUp().setVisible(false);
 		header.getButtonPostList().setIsCurrent(true);
 		add(header, BorderLayout.NORTH);
@@ -175,6 +176,7 @@ public class PostList extends JFrame{
 				int postId = Integer.parseInt(row.getFirst());
 				PostResponseDTO postDTO = PostDAO.getPostReadDTO(postId);
 				new PostRead(postDTO);
+				dispose();
 			}
 
 			@Override
@@ -195,8 +197,5 @@ public class PostList extends JFrame{
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		//E: JFrame Setting
-	}
-	public static void main(String[] args) {
-		new PostList();
 	}
 }
