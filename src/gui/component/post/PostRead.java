@@ -385,12 +385,7 @@ public class PostRead extends JFrame {
         comments.stream().forEach(
                 item -> commentListWrap.add(item)
         );
-//        //E: commentListWrap
-//        //S: commentPagenation
-
-        Pagenation commentPagenation = new Pagenation(24);
-        commentList.add(commentPagenation, BorderLayout.SOUTH);
-        //E: commentPagenation
+        //E: commentListWrap
 
 
 
