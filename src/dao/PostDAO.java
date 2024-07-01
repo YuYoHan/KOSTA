@@ -4,6 +4,7 @@ import config.JDBCConfig;
 import dto.PostRequestDTO;
 import dto.PostResponseDTO;
 
+import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -125,5 +126,46 @@ public class PostDAO {
             JDBCConfig.close(rs, preparedStatement, connection);
         }
         return postDTO;
+    }
+
+    // 포스트 수정
+    public static int postUpdate(int postId, String postTitle, String postContent){
+        int resultNum = 0;
+
+        try{
+            connection = JDBCConfig.getConnection();
+            connection.setAutoCommit(false);
+            String sql = "UPDATE POST SET POST_TITLE = ?, POST_CONTENTS = ? WHERE POST_ID = ?";
+
+            //S: 작업 1 - pstmt 수정 시도하여 수정된 행의 수를 리턴한다.
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, postTitle);
+            preparedStatement.setString(2, postContent);
+            preparedStatement.setInt(3, postId);
+
+            resultNum = preparedStatement.executeUpdate();
+            //E: 작업 1
+
+            //S: 작업 2 - resultNum 으로 작업 실패 및 성공 판단
+            if(resultNum == 1) {
+                connection.commit();
+            }else{
+                connection.rollback();
+                JOptionPane.showMessageDialog(null, "포스터 수정 실패 : 변경 값 = "+ resultNum);
+            }
+            //E: 작업 2
+        }catch (Exception e){
+            System.out.println(e);
+            e.printStackTrace();
+        }finally {
+            JDBCConfig.close(preparedStatement, connection);
+            try {
+                connection.setAutoCommit(true);
+            }catch (Exception e){
+                System.out.println(e);
+            }
+        }
+
+        return resultNum;
     }
 }

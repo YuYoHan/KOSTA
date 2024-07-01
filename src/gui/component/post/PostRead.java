@@ -7,6 +7,7 @@ import dto.CommentComponentDTO;
 import dto.CommentDTO;
 import dto.PostResponseDTO;
 import dto.UserDTO;
+import gui.component.post.EditPost;
 import gui.component.global.CustomStyle;
 import gui.component.buttons.*;
 import gui.component.comment.Comment;
@@ -185,6 +186,18 @@ public class PostRead extends JFrame {
 
         toPostEdit = new DefaultButton("           게시글 수정           ");
         postBottomButtons.add(toPostEdit);
+
+        // 수정 버튼
+        toPostEdit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                EditPost jf = new EditPost(PostRead.this);
+                jf.setTitleField(postTitle.getText());
+                jf.setContentField(postContentTxt.getText());
+                jf.setPostDTO(postDTO);
+            }
+        });
+
         toPostDelete = new DangerButton("           게시글 삭제           ");
         postBottomButtons.add(toPostDelete);
 
