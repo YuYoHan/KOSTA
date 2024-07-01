@@ -40,7 +40,7 @@ public class PostRead extends JFrame {
     public ArrayList<Comment> createCommentsList() {
         comments.clear();
         // 해당 게시글 번호를 참조한 댓글 리스트로 댓글 생성
-        for (CommentDTO comment : CommentDAO.listComment(30)) {
+        for (CommentDTO comment : CommentDAO.listComment(postDTO.getPostId())) {
             comments.add(new Comment(comment));
         }
         commentCnt=comments.size()+"";
@@ -333,7 +333,7 @@ public class PostRead extends JFrame {
                 System.out.println("contents = " + contents);
                 CommentDTO commentDTO = new CommentDTO();
                 commentDTO.setCommentContents(contents);
-                commentDTO.setPostId(30);
+                commentDTO.setPostId(postDTO.getPostId());
                 commentDTO.setUserId(userId);
                 int re=CommentDAO.insertComment(commentDTO);
                 System.out.println(re);
