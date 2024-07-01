@@ -1,15 +1,27 @@
 package gui.component.comment;
 
 import config.SessionManager;
+import dao.CommentDAO;
+import dao.UserDAO;
+import dto.CommentDTO;
 import gui.component.global.CustomStyle;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Date;
 
 public class Comment extends JPanel {
     JTextArea commentTxt;
-    public Comment(String nickname, String date, String txt){
+    String nickname;
+    String contents;
+    String date;
+    public Comment(CommentDTO commentDTO){
+        nickname=CommentDAO.getNickname(commentDTO.getPostId(),commentDTO.getUserId());
+        contents=commentDTO.getCommentContents();
+        date=commentDTO.getRegDate().toLocalDate()+"";
 
         setBackground(CustomStyle.white);
         setBorder(BorderFactory.createMatteBorder(0,0,1,0, CustomStyle.borderColor)
@@ -38,20 +50,6 @@ public class Comment extends JPanel {
         commentButtonWrap.setLayout(new FlowLayout(FlowLayout.RIGHT));
         topWrap.add(commentButtonWrap);
 
-        if (nickname.equals(SessionManager.getCurrentUser())){
-            System.out.println("유저 닉네임 확인 : "+nickname);
-            System.out.println("Curren User : "+SessionManager.getCurrentUser());
-            JButton editButton = new JButton("수정");
-            editButton.setBackground(CustomStyle.white);
-            editButton.setFont(CustomStyle.setCutomFont(13,'n'));
-            editButton.setBorderPainted(false);
-            JButton deleteButton = new JButton("삭제");
-            deleteButton.setBackground(CustomStyle.white);
-            deleteButton.setFont(CustomStyle.setCutomFont(13,'n'));
-            deleteButton.setBorderPainted(false);
-            commentButtonWrap.add(editButton);
-            commentButtonWrap.add(deleteButton);
-        }
 
         JLabel commentNickname = new JLabel(nickname);
         commentNickname.setFont(CustomStyle.setCutomFont(14, 'b'));
@@ -76,13 +74,66 @@ public class Comment extends JPanel {
         commentItemContent.add(commentTxtWrap, BorderLayout.SOUTH);
 
         commentTxt = new JTextArea();
-        commentTxt.setText(txt);
+        commentTxt.setText(contents);
         commentTxt.setFont(CustomStyle.setCutomFont(16, 'n'));
         commentTxt.setLineWrap(true);
         commentTxt.setWrapStyleWord(true);
         commentTxt.setEnabled(false);
-        commentTxtWrap.add(commentTxt);
+        commentTxtWrap.add(commentTxt,BorderLayout.CENTER);
 
+        if (nickname.equals(SessionManager.getCurrentUser())){
+            System.out.println("유저 닉네임 확인 : "+nickname);
+            System.out.println("Curren User : "+SessionManager.getCurrentUser());
+            JButton editButton = new JButton("수정");
+            editButton.setBackground(CustomStyle.white);
+            editButton.setFont(CustomStyle.setCutomFont(13,'n'));
+            editButton.setBorderPainted(false);
+            JButton deleteButton = new JButton("삭제");
+            deleteButton.setBackground(CustomStyle.white);
+            deleteButton.setFont(CustomStyle.setCutomFont(13,'n'));
+            deleteButton.setBorderPainted(false);
+            commentButtonWrap.add(editButton);
+            commentButtonWrap.add(deleteButton);
+
+            editButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    commentTxt.setEnabled(true);
+                    commentTxt.setBackground(Color.WHITE); // 편집 가능 시 배경색 설정
+                    commentTxt.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY)); // 테두리 설정
+                    commentTxt.setForeground(Color.BLACK); // 편집 가능 시 글자색 설정
+                    commentTxt.requestFocus();  // 텍스트 필드에 포커스 설정
+                    JButton commentWriteButton = new JButton("입력");
+                    commentTxtWrap.add(commentWriteButton,BorderLayout.EAST);
+                    updateUI();
+
+                    commentWriteButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            commentDTO.setCommentContents(commentTxt.getText());
+                            CommentDAO.updateComment(commentDTO);
+                            commentTxt.setText(contents);
+                            commentTxt.setBorder(null);
+                            commentTxt.setFont(CustomStyle.setCutomFont(16, 'n'));
+                            commentTxt.setLineWrap(true);
+                            commentTxt.setWrapStyleWord(true);
+                            commentTxt.setEnabled(false);
+                            contents=commentDTO.getCommentContents();
+                            commentWriteButton.setVisible(false);
+                            updateUI();
+                        }
+                    });
+                }
+            });
+            deleteButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    CommentDAO.deleteComment(commentDTO.getCommentId());
+                    updateUI();
+                    setVisible(false);
+                }
+            });
+        }
     }
     public void setCommentWidth(int frameWidth){
         commentTxt.setSize(frameWidth - (CustomStyle.DISPLAY_MARGIN*2 + 48 + 16+2+32), 20);

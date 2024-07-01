@@ -104,7 +104,7 @@ public class CommentDAO {
 //     포스트에 해당하는 댓글만 가져오기
     public static ArrayList<CommentDTO> listComment(int postId) {
         ArrayList<CommentDTO> list = new ArrayList<CommentDTO>();
-        String sql="select * from comments where post_id=?";
+        String sql="select COMMENT_ID,COMMENT_CONTENTS,COMMENT_REGTIME,POST_ID,USER_ID from comments where post_id=? ORDER BY COMMENT_REGTIME DESC";
         ResultSet resultSet=null;
         CommentDTO commentDTO=null;
         try {
@@ -144,25 +144,21 @@ public class CommentDAO {
     }
 
     // comment gui에 필요한 데이터만 가져오는 메서드
-    public static ArrayList<CommentComponentDTO> getComments(int postid) {
+    public static String getNickname(int postid, int userid) {
         String nickname = "";
-        String sql = "select NICKNAME,COMMENT_REGTIME,COMMENT_CONTENTS from users u, comments c where u.USER_ID=c.USER_ID and POST_ID=? ORDER BY COMMENT_REGTIME DESC";
-        ResultSet resultSet=null;
-        ArrayList<CommentComponentDTO> list = new ArrayList<CommentComponentDTO>();
+        String sql = "select U.NICKNAME from users u, comments c where u.USER_ID=c.USER_ID and C.POST_ID=? and C.USER_ID=? ORDER BY COMMENT_REGTIME DESC";
         CommentComponentDTO commentComponentDTO = null;
+        ResultSet resultSet=null;
         try {
             Class.forName(driver);
             connection = DriverManager.getConnection(url, username, password);
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1,postid);
+            preparedStatement.setInt(2,userid);
             resultSet= preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                commentComponentDTO = new CommentComponentDTO();
-                commentComponentDTO.setNickname(resultSet.getString(1));
-                commentComponentDTO.setRegDate(resultSet.getTimestamp(2).toLocalDateTime());
-                commentComponentDTO.setContents(resultSet.getString(3));
-                list.add(commentComponentDTO);
+                nickname=resultSet.getString(1);
             }
 
         } catch (Exception e) {
@@ -179,12 +175,16 @@ public class CommentDAO {
                 System.out.println(e2.getMessage());
             }
         }
-        return list;
+        return nickname;
     }
 
     public static void main(String[] args) {
-        // SELECT TEST
-        ArrayList<CommentComponentDTO> list = getComments(30);
-        System.out.println(list);
+//        String nickname = getNickname(2,1);
+//        System.out.println(nickname);
+        ArrayList<CommentDTO> list = listComment(30);
+        for (CommentDTO commentDTO : list) {
+            System.out.println(commentDTO);
+        }
     }
+
 }
