@@ -12,7 +12,6 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import config.SessionManager;
-import gui.CustomStyle;
 import gui.Index;
 import gui.component.buttons.DefaultButton;
 import gui.component.buttons.TextButton;

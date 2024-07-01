@@ -2,6 +2,7 @@ package gui;
 
 import config.SessionManager;
 import gui.component.buttons.PrimaryButton;
+import gui.component.global.CustomStyle;
 import gui.component.global.Footer;
 import gui.component.global.Header;
 import gui.component.user.SignUp;

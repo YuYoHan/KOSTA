@@ -2,7 +2,7 @@ package gui.component.post;
 
 import dao.CommentDAO;
 import dto.CommentComponentDTO;
-import gui.CustomStyle;
+import gui.component.global.CustomStyle;
 import gui.component.buttons.*;
 import gui.component.comment.Comment;
 import gui.component.global.Header;

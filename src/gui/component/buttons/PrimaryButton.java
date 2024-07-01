@@ -3,7 +3,7 @@ package gui.component.buttons;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import gui.CustomStyle;
+import gui.component.global.CustomStyle;
 
 //보라색 배경의 흰글씨 버튼이다.
 public class PrimaryButton extends RoundButtons{

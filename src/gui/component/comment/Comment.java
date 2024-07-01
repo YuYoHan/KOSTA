@@ -1,7 +1,7 @@
 package gui.component.comment;
 
 import config.SessionManager;
-import gui.CustomStyle;
+import gui.component.global.CustomStyle;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

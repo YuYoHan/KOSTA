@@ -8,7 +8,7 @@ import java.util.stream.IntStream;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import gui.CustomStyle;
+import gui.component.global.CustomStyle;
 
 //페이지네이션으로 끝 번호를 매개변수로 받는다.
 //unit 는 페이지 네이션의 버튼들의 단위로 변경 가능하다.(1~10, 11~20, ...)

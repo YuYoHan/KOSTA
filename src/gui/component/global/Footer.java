@@ -1,7 +1,5 @@
 package gui.component.global;
 
-import gui.CustomStyle;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;

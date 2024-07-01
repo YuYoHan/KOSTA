@@ -1,6 +1,6 @@
 package gui.component.buttons;
 
-import gui.CustomStyle;
+import gui.component.global.CustomStyle;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;

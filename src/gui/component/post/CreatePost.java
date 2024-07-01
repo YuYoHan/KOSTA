@@ -1,6 +1,6 @@
 package gui.component.post;
 
-import gui.CustomStyle;
+import gui.component.global.CustomStyle;
 import gui.Index;
 import gui.component.buttons.DefaultButton;
 import gui.component.buttons.PrimaryButton;
