@@ -168,4 +168,45 @@ public class PostDAO {
 
         return resultNum;
     }
+
+    // 포스트 삭제
+    public static int postDelete(int postId){
+        int resultNum = 0;
+
+        try{
+            connection = JDBCConfig.getConnection();
+            connection.setAutoCommit(false);
+            String sql = "DELETE POST WHERE POST_ID = ?";
+
+            System.out.println(postId);
+            //S: 작업 1 - pstmt 삭제 시도하여 삭제된 행의 수를 리턴한다.
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, postId);
+
+            resultNum = preparedStatement.executeUpdate();
+            //E: 작업 1
+            System.out.println(resultNum);
+            //S: 작업 2 - resultNum 으로 작업 실패 및 성공 판단
+            if(resultNum == 1) {
+                connection.commit();
+                JOptionPane.showMessageDialog(null, "포스터를 삭제하였습니다");
+            }else{
+                connection.rollback();
+                JOptionPane.showMessageDialog(null, "포스터 삭제 실패 : 변경 값 = "+ resultNum);
+            }
+            //E: 작업 2
+        }catch (Exception e){
+            System.out.println(e);
+            e.printStackTrace();
+        }finally {
+            JDBCConfig.close(preparedStatement, connection);
+            try {
+                connection.setAutoCommit(true);
+            }catch (Exception e){
+                System.out.println(e);
+            }
+        }
+
+        return resultNum;
+    }
 }

@@ -2,6 +2,7 @@ package gui.component.post;
 
 import config.SessionManager;
 import dao.CommentDAO;
+import dao.PostDAO;
 import dao.UserDAO;
 import dto.CommentComponentDTO;
 import dto.CommentDTO;
@@ -200,6 +201,16 @@ public class PostRead extends JFrame {
 
         toPostDelete = new DangerButton("           게시글 삭제           ");
         postBottomButtons.add(toPostDelete);
+
+        //삭제
+        toPostDelete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PostDAO.postDelete(postDTO.getPostId());
+                dispose();
+                new PostList();
+            }
+        });
 
         //S: 포스트 작성자가 글을 조회했을때 보이는 버튼들
         if(!(SessionManager.getCurrentUser().equals(postDTO.getNickname()))){
