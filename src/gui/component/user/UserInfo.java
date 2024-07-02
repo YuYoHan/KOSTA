@@ -181,7 +181,6 @@ public class UserInfo extends JFrame {
         setTitle("회원수정");
         setSize(650, 450);
         setLocationRelativeTo(null); // 화면 가운데 정렬
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
 
         // 수정
