@@ -15,66 +15,22 @@ public class UserDAO {
     // 조회
     public static UserDTO select(String userId) {
         String sql = "SELECT * FROM users WHERE user_login_id = ?";
-        UserDTO userDTO = null;
-        try {
-            connection = JDBCConfig.getConnection();
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, userId);
-            rs = preparedStatement.executeQuery();
-            userDTO = new UserDTO();
-            while (rs.next()) {
-                userDTO.setUserId(rs.getInt("user_id"));
-                userDTO.setUserLoginID(rs.getString("user_login_id"));
-                userDTO.setUserPw(rs.getString("user_pw"));
-                userDTO.setUserEmail(rs.getString("user_email"));
-                userDTO.setNickName(rs.getString("nickname"));
-                System.out.println(userDTO);
-            }
-        } catch (Exception e) {
-            System.out.println("에러 발생 : " + e.getMessage());
-        } finally {
-            try {
-                JDBCConfig.close(rs, preparedStatement, connection);
-            } catch (Exception e) {
-                System.out.println("에러 발생 : " + e.getMessage());
-            }
-        }
-        return userDTO;
+        return selectConnectDB(userId, sql);
     }
 
     // 이메일로 조회
     public static UserDTO selectByEmail(String email) {
         String sql = "SELECT * FROM users WHERE user_email = ?";
-        UserDTO userDTO = null;
-        try {
-            connection = JDBCConfig.getConnection();
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, email);
-            rs = preparedStatement.executeQuery();
-            userDTO = new UserDTO();
-            while (rs.next()) {
-                userDTO.setUserId(rs.getInt("user_id"));
-                userDTO.setUserLoginID(rs.getString("user_login_id"));
-                userDTO.setUserPw(rs.getString("user_pw"));
-                userDTO.setUserEmail(rs.getString("user_email"));
-                userDTO.setNickName(rs.getString("nickname"));
-                System.out.println(userDTO);
-            }
-        } catch (Exception e) {
-            System.out.println("에러 발생 : " + e.getMessage());
-        } finally {
-            try {
-                JDBCConfig.close(rs, preparedStatement, connection);
-            } catch (Exception e) {
-                System.out.println("에러 발생 : " + e.getMessage());
-            }
-        }
-        return userDTO;
+        return selectConnectDB(email, sql);
     }
 
     // 닉네임으로 조회
     public static UserDTO selectByNickName(String nickName) {
         String sql = "SELECT * FROM users WHERE NICKNAME = ?";
+        return selectConnectDB(nickName, sql);
+    }
+
+    private static UserDTO selectConnectDB(String nickName, String sql) {
         UserDTO userDTO = null;
         try {
             connection = JDBCConfig.getConnection();
