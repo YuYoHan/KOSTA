@@ -181,7 +181,7 @@ public class SignUp extends JFrame {
                     JOptionPane.showMessageDialog(null, "이메일을 입력하세요");
                     emailAvailable = false;
                 } else if (email.matches("^[가-힣]*$") ||
-                        email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
+                        !(email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"))) {
                     JOptionPane.showMessageDialog(null, "이메일 형식을 맞춰주세요.");
                     emailAvailable = false;
                 } else {

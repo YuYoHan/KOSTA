@@ -23,7 +23,7 @@ public class PostDAO {
 
     // 게시물 전체 조회
     public static List<PostResponseDTO> selectAll(){
-        String sql = "SELECT * FROM post, users where users.user_id= post.user_id";
+        String sql = "SELECT * FROM post, users where users.user_id= post.user_id order by post_regtime desc";
         List<PostResponseDTO> posts = new ArrayList<>();
         try {
             connection = JDBCConfig.getConnection();
