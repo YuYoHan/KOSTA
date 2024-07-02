@@ -18,8 +18,6 @@
 [노션](https://recondite-broom-8c2.notion.site/1-004272eefa9a49d499d5123b0dcc850b?pvs=4)
 [피그마](https://www.figma.com/design/On9nZFxlr9LA1npykgkQks/Figma-basics?node-id=1669-162202)
 
-## 화면 영상
-
 ## 요구사항 명세서
 ![image](https://github.com/YuYoHan/KOSTA/assets/110465572/98cc762c-ec2c-4a00-b15b-f4f347def75c)
 
