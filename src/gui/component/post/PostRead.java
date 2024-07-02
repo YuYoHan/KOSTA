@@ -1,26 +1,58 @@
 package gui.component.post;
 
-import gui.CustomStyle;
+import config.SessionManager;
+import dao.CommentDAO;
+import dao.PostDAO;
+import dao.UserDAO;
+import dto.CommentComponentDTO;
+import dto.CommentDTO;
+import dto.PostResponseDTO;
+import dto.UserDTO;
+import gui.component.post.EditPost;
+import gui.component.global.CustomStyle;
 import gui.component.buttons.*;
-import gui.component.comment.CommentItem;
+import gui.component.comment.Comment;
 import gui.component.global.Header;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class PostRead extends JFrame {
-    ArrayList<CommentItem> commentItems;
-    PostRead(){
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private DefaultButton toListButton;
+    private DefaultButton toPostEdit;
+    private DangerButton toPostDelete;
+    private PostResponseDTO postDTO;
+
+    ArrayList<Comment> comments;
+    String commentCnt;
+    Box commentListWrap;
+
+    public PostResponseDTO getPostDTO() {
+        return postDTO;
+    }
+
+    public ArrayList<Comment> createCommentsList() {
+        comments.clear();
+        // 해당 게시글 번호를 참조한 댓글 리스트로 댓글 생성
+        for (CommentDTO comment : CommentDAO.listComment(postDTO.getPostId())) {
+            comments.add(new Comment(comment));
+        }
+        commentCnt=comments.size()+"";
+        return comments;
+    }
+    public PostRead(PostResponseDTO postDTO){
+        this.postDTO = postDTO;
+        comments = new ArrayList<>();
         setLayout(new BorderLayout());
         UIManager.put("TextArea.inactiveForeground", Color.BLACK);//TextArea enabled(false)인 상태에서도 글씨색 그대로
         //S: header
-        Header header = new Header();
+        Header header = new Header(this);
         header.getButtonPostList().setIsCurrent(true);
         header.getButtonLogout().setVisible(false);
         header.getButtonSignUp().setVisible(false);
@@ -30,7 +62,6 @@ public class PostRead extends JFrame {
         //S: body
         JScrollPane bodyScrollWrap = new JScrollPane();
         bodyScrollWrap.setBorder(null);
-        //bodyScrollWrap.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         bodyScrollWrap.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         bodyScrollWrap.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -56,6 +87,14 @@ public class PostRead extends JFrame {
         buttonArea.setLayout(new FlowLayout(FlowLayout.LEFT));
         postArea.add(buttonArea, BorderLayout.NORTH);
         RoundButtons buttonBack = new TextButton("< 뒤로가기");
+        // 뒤로가기 버튼
+        buttonBack.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                new PostList();
+            }
+        });
         buttonArea.setBackground(CustomStyle.white);
         buttonArea.add(buttonBack);
         body.add(buttonArea, BorderLayout.NORTH);
@@ -71,7 +110,7 @@ public class PostRead extends JFrame {
         postTitleContent.setLayout(new GridLayout(2,1));
         postTitleArea.add(postTitleContent);
 
-        JTextArea postTitle = new JTextArea("이번 사태를 보면서 느낀 점 한가지가 있음. 이 제목이 길어지면 자연스럽게 텍스트가 내려가야함.이번 사태를 보면서 느낀 점 한가지가 있음. 이 제목이 길어지면 자연스럽게 텍스트가 내려가야함.");
+        JTextArea postTitle = new JTextArea(postDTO.getPostTitle());
         postTitle.setBackground(new Color(247, 247, 250));
         postTitle.setLineWrap(true);
         postTitle.setWrapStyleWord(true);
@@ -86,11 +125,11 @@ public class PostRead extends JFrame {
         etcPostInfo.setBackground(CustomStyle.transparency);
         postTitleContent.add(etcPostInfo);
 
-        JLabel nickname = new JLabel("뜨거운 감자가 조아");
+        JLabel nickname = new JLabel(postDTO.getNickname());
         nickname.setFont(CustomStyle.setCutomFont(16, 'n'));
         nickname.setForeground(CustomStyle.black50);
         etcPostInfo.add(nickname);
-        JLabel postWriteDate = new JLabel("2023.12.20");
+        JLabel postWriteDate = new JLabel(dateFormat.format(postDTO.getPostRegTime()));
         postWriteDate.setFont(CustomStyle.setCutomFont(16, 'n'));
         postWriteDate.setForeground(CustomStyle.black50);
         postWriteDate.setBorder(new EmptyBorder(0, 8, 0, 0));
@@ -113,19 +152,7 @@ public class PostRead extends JFrame {
         postContent.add(postContentWrap, BorderLayout.CENTER);
 
         
-        JTextArea postContentTxt = new JTextArea("대통령은 법률이 정하는 바에 의하여 훈장 기타의 영전을 수여한다. 비상계엄하의 군사재판은 군인·군무원의 범죄나 군사에 관한 간첩죄의 경우와 초병·초소·유독음식물공급·포로에 관한 죄중 법률이 정한 경우에 한하여 단심으로 할 수 있다. 다만, 사형을 선고한 경우에는 그러하지 아니하다." +
-                "헌법재판소의 장은 국회의 동의를 얻어 재판관중에서 대통령이 임명한다. 군인 또는 군무원이 아닌 국민은 대한민국의 영역안에서는 중대한 군사상 기밀·초병·초소·유독음식물공급·포로·군용물에 관한 죄중 법률이 정한 경우와 비상계엄이 선포된 경우를 제외하고는 군사법원의 재판을 받지 아니한다." +
-                "\n\n" +
-                "대통령은 법률이 정하는 바에 의하여 훈장 기타의 영전을 수여한다. 비상계엄하의 군사재판은 군인·군무원의 범죄나 군사에 관한 간첩죄의 경우와 초병·초소·유독음식물공급·포로에 관한 죄중 법률이 정한 경우에 한하여 단심으로 할 수 있다. 다만, 사형을 선고한 경우에는 그러하지 아니하다." +
-                "헌법재판소의 장은 국회의 동의를 얻어 재판관중에서 대통령이 임명한다. 군인 또는 군무원이 아닌 국민은 대한민국의 영역안에서는 중대한 군사상 기밀·초병·초소·유독음식물공급·포로·군용물에 관한 죄중 법률이 정한 경우와 비상계엄이 선포된 경우를 제외하고는 군사법원의 재판을 받지 아니한다." +
-                "대통령은 법률이 정하는 바에 의하여 훈장 기타의 영전을 수여한다. 비상계엄하의 군사재판은 군인·군무원의 범죄나 군사에 관한 간첩죄의 경우와 초병·초소·유독음식물공급·포로에 관한 죄중 법률이 정한 경우에 한하여 단심으로 할 수 있다. 다만, 사형을 선고한 경우에는 그러하지 아니하다." +
-                "\n\n" +
-                "헌법재판소의 장은 국회의 동의를 얻어 재판관중에서 대통령이 임명한다. 군인 또는 군무원이 아닌 국민은 대한민국의 영역안에서는 중대한 군사상 기밀·초병·초소·유독음식물공급·포로·군용물에 관한 죄중 법률이 정한 경우와 비상계엄이 선포된 경우를 제외하고는 군사법원의 재판을 받지 아니한다." +
-                "대통령은 법률이 정하는 바에 의하여 훈장 기타의 영전을 수여한다. 비상계엄하의 군사재판은 군인·군무원의 범죄나 군사에 관한 간첩죄의 경우와 초병·초소·유독음식물공급·포로에 관한 죄중 법률이 정한 경우에 한하여 단심으로 할 수 있다. 다만, 사형을 선고한 경우에는 그러하지 아니하다." +
-                "헌법재판소의 장은 국회의 동의를 얻어 재판관중에서 대통령이 임명한다. 군인 또는 군무원이 아닌 국민은 대한민국의 영역안에서는 중대한 군사상 기밀·초병·초소·유독음식물공급·포로·군용물에 관한 죄중 법률이 정한 경우와 비상계엄이 선포된 경우를 제외하고는 군사법원의 재판을 받지 아니한다." +
-                "\n\n" +
-                "대통령은 법률이 정하는 바에 의하여 훈장 기타의 영전을 수여한다. 비상계엄하의 군사재판은 군인·군무원의 범죄나 군사에 관한 간첩죄의 경우와 초병·초소·유독음식물공급·포로에 관한 죄중 법률이 정한 경우에 한하여 단심으로 할 수 있다. 다만, 사형을 선고한 경우에는 그러하지 아니하다." +
-                "헌법재판소의 장은 국회의 동의를 얻어 재판관중에서 대통령이 임명한다. 군인 또는 군무원이 아닌 국민은 대한민국의 영역안에서는 중대한 군사상 기밀·초병·초소·유독음식물공급·포로·군용물에 관한 죄중 법률이 정한 경우와 비상계엄이 선포된 경우를 제외하고는 군사법원의 재판을 받지 아니한다.");
+        JTextArea postContentTxt = new JTextArea(postDTO.getPostContents());
         postContentTxt.setLineWrap(true);
         postContentTxt.setWrapStyleWord(true);
 
@@ -146,14 +173,50 @@ public class PostRead extends JFrame {
         postBottomButtons.setBorder(new EmptyBorder(24, 24, 28, 24));
         postButtonsArea.add(postBottomButtons);
 
-        DefaultButton toListButton = new DefaultButton("            목록으로            ");
+        toListButton = new DefaultButton("            목록으로            ");
         postBottomButtons.add(toListButton);
 
-        //S: 포스트 작성자가 글을 조회했을때 보이는 버튼들
-        DefaultButton toPostEdit = new DefaultButton("           게시글 수정           ");
+        // 목록으로 버튼
+        toListButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                new PostList();
+            }
+        });
+
+        toPostEdit = new DefaultButton("           게시글 수정           ");
         postBottomButtons.add(toPostEdit);
-        DangerButton toPostDelete = new DangerButton("           게시글 삭제           ");
+
+        // 수정 버튼
+        toPostEdit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                EditPost jf = new EditPost(PostRead.this);
+                jf.setTitleField(postTitle.getText());
+                jf.setContentField(postContentTxt.getText());
+                jf.setPostDTO(postDTO);
+            }
+        });
+
+        toPostDelete = new DangerButton("           게시글 삭제           ");
         postBottomButtons.add(toPostDelete);
+
+        //삭제
+        toPostDelete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PostDAO.postDelete(postDTO.getPostId());
+                dispose();
+                new PostList();
+            }
+        });
+
+        //S: 포스트 작성자가 글을 조회했을때 보이는 버튼들
+        if(!(SessionManager.getCurrentUser().equals(postDTO.getNickname()))){
+            toPostEdit.setVisible(false);
+            toPostDelete.setVisible(false);
+        }
         //E: 포스트 작성자가 글을 조회했을때 보이는 버튼들
 
         //E: PostAllowButtons
@@ -173,7 +236,9 @@ public class PostRead extends JFrame {
         defaultLabel.setFont(CustomStyle.setCutomFont(16, 'n'));
         commentTotalArea.add(defaultLabel);
 
-        JLabel commentNumLabel = new JLabel("234");
+        // 해당 게시글 번호를 참조한 댓글 리스트로 댓글 생성
+        createCommentsList();
+        JLabel commentNumLabel = new JLabel(commentCnt);
         commentNumLabel.setForeground(CustomStyle.mainColor);
         commentNumLabel.setFont(CustomStyle.setCutomFont(16, 'b'));
         commentTotalArea.add(commentNumLabel);
@@ -260,7 +325,27 @@ public class PostRead extends JFrame {
         commentWriteBottom.add(commentWriteButton, BorderLayout.EAST);
         commentWriteButton.addMouseListener(new MouseListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {}
+            public void mouseClicked(MouseEvent e) {
+                UserDTO userDTO = UserDAO.selectByNickName(SessionManager.getCurrentUser());
+                int userId = userDTO.getUserId();
+                System.out.println("userId = " + userId);
+                String contents=commentWriteField.getText();
+                System.out.println("contents = " + contents);
+                CommentDTO commentDTO = new CommentDTO();
+                commentDTO.setCommentContents(contents);
+                commentDTO.setPostId(postDTO.getPostId());
+                commentDTO.setUserId(userId);
+                int re=CommentDAO.insertComment(commentDTO);
+                System.out.println(re);
+                commentWriteField.setText(null);
+                createCommentsList();
+                commentListWrap.removeAll();
+                comments.stream().forEach(
+                        item -> commentListWrap.add(item)
+                );
+                commentNumLabel.setText(commentCnt);
+                repaint();
+            }
 
             @Override
             public void mousePressed(MouseEvent e) {
@@ -293,24 +378,14 @@ public class PostRead extends JFrame {
         commentArea.add(commentList, BorderLayout.SOUTH);
         //E: commentList
         //S: commentListWrap
-        Box commentListWrap = Box.createVerticalBox();//수직으로 배치하는 박스레이아웃
+        commentListWrap = Box.createVerticalBox();//수직으로 배치하는 박스레이아웃
         commentListWrap.setBackground(CustomStyle.white);
         commentList.add(commentListWrap);
 
-        commentItems = new ArrayList<>();
-
-        commentItems.add(new CommentItem("1","1","1"));
-        commentItems.add(new CommentItem("2","2","2"));
-
-        commentItems.stream().forEach(
+        comments.stream().forEach(
                 item -> commentListWrap.add(item)
         );
         //E: commentListWrap
-        //S: commentPagenation
-
-        Pagenation commentPagenation = new Pagenation(24);
-        commentList.add(commentPagenation, BorderLayout.SOUTH);
-        //E: commentPagenation
 
 
 
@@ -335,7 +410,7 @@ public class PostRead extends JFrame {
                 //E: comment TextField 크기 변경
 
                 //S: comment 내용 크기 변경
-                commentItems.stream().forEach(
+                comments.stream().forEach(
                         item -> item.setCommentWidth(frameSize.width)
                 );
                 //E: comment 내용 크기 변경
@@ -346,12 +421,5 @@ public class PostRead extends JFrame {
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         //E: JFrame Setting
-    }
-    
-
-
-
-    public static void main(String[] args) {
-        new PostRead();
     }
 }

@@ -3,7 +3,7 @@ package gui.component.input;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-import gui.CustomStyle;
+import gui.component.global.CustomStyle;
 
 import java.awt.*;
 

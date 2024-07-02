@@ -2,17 +2,26 @@ package gui;
 
 import config.SessionManager;
 import gui.component.buttons.PrimaryButton;
+import gui.component.global.CustomStyle;
 import gui.component.global.Footer;
 import gui.component.global.Header;
+import gui.component.post.CreatePost;
+import gui.component.user.Login;
+import gui.component.user.SignUp;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Index extends JFrame {
+    public String pBtnName = "지금 가입하기";
 
     public Index() {
+        String signNow="지금 가입하기";
+        String posting = "방명록 작성하기";
+        pBtnName=signNow;
         // 메인 패널 생성
         JPanel mainPanel = new JPanel();
         // JLabel을 JPanel에 담기위한 패널
@@ -24,7 +33,7 @@ public class Index extends JFrame {
         JPanel rightTextPanel = new JPanel();
 
         //헤더 패널 생성
-        Header headerPanel = new Header();
+        Header headerPanel = new Header(this);
         //헤더 패널 버튼 정리
         headerPanel.getButtonMyPage().setVisible(false);
         headerPanel.getButtonLogout().setVisible(false);
@@ -40,9 +49,27 @@ public class Index extends JFrame {
             headerPanel.getButtonPostList().setVisible(true);
             headerPanel.getButtonLogin().setVisible(false);
             headerPanel.getButtonSignUp().setVisible(false);
+            // 회원가입버튼 / 게시물 작성 버튼
+            pBtnName=posting;
         }
 
-         //푸터 패널 생성
+        PrimaryButton mainSignupBtn = new PrimaryButton(pBtnName);
+        // 지금 가입하기 버튼 기능
+        JFrame page=this;
+        mainSignupBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(pBtnName.equals(signNow)) {
+                    new SignUp(page);
+                }else {
+                    new CreatePost(page);
+                }
+            }
+        });
+
+
+
+        //푸터 패널 생성
         Footer footerPanel = new Footer();
 
         // 메인 이미지 패널에 담기
@@ -60,38 +87,44 @@ public class Index extends JFrame {
         //메인 로고 라벨 만들기
         ImageIcon titleImage = new ImageIcon(getClass().getClassLoader().getResource("img/logo_720.png"));
         Image img = titleImage.getImage();
-        Image changeLogoImg = img.getScaledInstance(450, 110, Image.SCALE_SMOOTH);
+        Image changeLogoImg = img.getScaledInstance(500, 110, Image.SCALE_SMOOTH);
         ImageIcon changeLogoIcon = new ImageIcon(changeLogoImg);
         JLabel titleLb = new JLabel();
         titleLb.setIcon(changeLogoIcon);
 
         // 메인 텍스트 패널에 담기
-        JLabel jLabel1 = new JLabel("방명록을 통해                               ");
+        JLabel jLabel1 = new JLabel("방명록을 통해                        ");
         jLabel1.setFont(CustomStyle.setCutomFont(40,'n'));
         jLabel1.setOpaque(true);
         jLabel1.setBackground(Color.WHITE);
-        JLabel jLabel2 = new JLabel("생각을 공유하세요                           ");
+        JLabel jLabel2 = new JLabel("생각을 공유하세요                     ");
         jLabel2.setFont(CustomStyle.setCutomFont(40,'n'));
         jLabel2.setOpaque(true);
         jLabel2.setBackground(Color.WHITE);
 
-        // 회원가입버튼 / 게시물 작성 버튼
-        String pBtnName = "지금 가입하기";
-        if (SessionManager.getCurrentUser() != null) {
-            pBtnName="게시물 작성";
-        }
-        PrimaryButton pBtn = new PrimaryButton(pBtnName);
+        ImageIcon textImage = new ImageIcon(getClass().getClassLoader().getResource("img/text.png"));
+        Image txtimg = textImage.getImage();
+        Image changeTextImg = txtimg.getScaledInstance(350, 150, Image.SCALE_SMOOTH);
+        ImageIcon changeTextIcon = new ImageIcon(changeTextImg);
+        JLabel textLb = new JLabel();
+        textLb.setIcon(changeTextIcon);
+        textLb.setBorder(new EmptyBorder(35,0,35,0));
+
+
 
         // 버튼 배경 색깔 수정
-        pBtn.setBackground(Color.white);
+        mainSignupBtn.setBackground(Color.white);
 
-        rightTextPanel.setLayout(new GridLayout(3,1));
+        rightTextPanel.setLayout(new BoxLayout(rightTextPanel, BoxLayout.Y_AXIS));
         rightTextPanel.add(jLabel1);
         rightTextPanel.add(jLabel2);
+        rightTextPanel.setBorder(new EmptyBorder(0, 50, 0, 30));
+        rightTextPanel.setBackground(Color.white);
         JPanel btnPanel = new JPanel();
         btnPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         btnPanel.setBackground(Color.white);
-        btnPanel.add(pBtn);
+        btnPanel.add(mainSignupBtn);
+        rightTextPanel.add(textLb);
         rightTextPanel.add(btnPanel);
 
         // 메인 패널 위:로고  아래:이미지+텍스트
@@ -126,57 +159,7 @@ public class Index extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-    }
-    // 로그인 후 보이는 창
-    public void afterLogin() {
-        // 기존 컴포넌트들을 제거
-        getContentPane().removeAll();
-        String currentUser = SessionManager.getCurrentUser();
-        System.out.println("현재 접속중인 닉네임 : " + currentUser);
 
-        JButton logout_button = new JButton("로그아웃");
-        JButton myInfo_button = new JButton("내정보보기");
-        JButton board_button = new JButton("게시물");
-
-        JPanel jPanel = new JPanel();
-        jPanel.add(logout_button);
-        jPanel.add(myInfo_button);
-        jPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        setLayout(new BorderLayout());
-        add(jPanel, BorderLayout.NORTH);
-
-        JPanel jPanel2 = new JPanel();
-        jPanel2.setLayout(new FlowLayout(FlowLayout.CENTER));
-        jPanel2.add(board_button);
-        add(jPanel2, BorderLayout.CENTER);
-
-        logout_button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("로그아웃 메뉴를 선택하였습니다.");
-                SessionManager.logoutUser();
-                dispose(); // 현재 윈도우를 닫음
-                setVisible(true);
-            }
-        });
-
-        board_button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("게시글 메뉴를 선택하였습니다.");
-                boolean check = SessionManager.isLoggedIn();
-                if(check) {
-                    return;
-                }
-            }
-        });
-
-        revalidate(); // 변경된 GUI를 다시 그리도록 갱신
-
-        // JFrame 설정
-        setSize(1440, 800);
-        setVisible(true);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
     public static void main(String[] args) {

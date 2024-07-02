@@ -1,6 +1,7 @@
 package gui.component.user;
 
 
+import config.CreateInstance;
 import config.PasswordEncode;
 import config.SessionManager;
 import dao.UserDAO;
@@ -15,6 +16,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.lang.reflect.Constructor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,7 +24,7 @@ public class Login extends JFrame {
     private HintTextField userLoginId;
     private HintPasswordField userPassword;
 
-    public Login(Index mainPage) {
+    public Login(JFrame mainPage) {
         // 로그인 구현할 패널 생성
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
@@ -187,9 +189,8 @@ public class Login extends JFrame {
                         String currentUser = SessionManager.getCurrentUser();
                         System.out.println(currentUser);
                         dispose(); // 현재 창 닫기
-                        new Index();
+                        CreateInstance.creatInstance(mainPage);
                         mainPage.setVisible(false);
-
                     } else {
                         JOptionPane.showMessageDialog(null, "로그인 실패");
                         SessionManager.loginUser(null);

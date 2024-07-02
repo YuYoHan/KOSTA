@@ -3,30 +3,42 @@ package gui.component.post;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.ScrollPaneConstants;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
-import gui.CustomStyle;
-import gui.CustomStyle.DrowSquare;
+import config.SessionManager;
+import dao.PostDAO;
+import dto.PostResponseDTO;
+import gui.component.global.CustomStyle;
+import gui.component.global.CustomStyle.DrowSquare;
 import gui.component.buttons.DefaultButton;
 import gui.component.buttons.Pagenation;
 import gui.component.buttons.PrimaryButton;
 import gui.component.global.Header;
 import gui.component.input.RoundInput;
 
+import static dao.PostDAO.selectAll;
+
 public class PostList extends JFrame{
-	PostList(){
+	private JTable table;
+	private Vector<Vector<String>> rowData = new Vector<>();
+	private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+	public PostList(){
 		//S:header
-		Header header = new Header();
-		header.getButtonLogout().setVisible(false);
+		Header header = new Header(this);
+		header.getButtonLogin().setVisible(false);
+		header.getButtonLogout().setVisible(true);
 		header.getButtonSignUp().setVisible(false);
 		header.getButtonPostList().setIsCurrent(true);
 		add(header, BorderLayout.NORTH);
@@ -76,15 +88,15 @@ public class PostList extends JFrame{
 		columnName.add("No");
 		columnName.add("제목");
 		columnName.add("작성자");
-		columnName.add("열1");
+		columnName.add("작성일");
+		List<PostResponseDTO> posts = selectAll(); // selectAll() 메서드 호출
 		Vector<Vector<String>> rowData = new Vector<>();
-		int testNum = 0;
-		while(testNum++ < 100) {
-			Vector<String> row = new Vector<String>();  
-			row.add(testNum+"");
-			row.add("테스트하는중..");
-			row.add("테스트");
-			row.add("흠");
+		for (PostResponseDTO post : posts) {
+			Vector<String> row = new Vector<>();
+			row.add(String.valueOf(post.getPostId()));
+			row.add(post.getPostTitle());
+			row.add(String.valueOf(post.getNickname()));
+			row.add(dateFormat.format(post.getPostRegTime()));
 			rowData.add(row);
 		}
 		table = new JTable(rowData, columnName);
@@ -113,8 +125,8 @@ public class PostList extends JFrame{
 		buttonsWrap.setLayout(new FlowLayout());
 		tableNavArea.add(buttonsWrap, BorderLayout.EAST);
 		buttonsWrap.setBackground(CustomStyle.white);
-		DefaultButton ButtonWrite = new DefaultButton("글쓰기");
-		buttonsWrap.add(ButtonWrite);
+		DefaultButton buttonWrite = new DefaultButton("글쓰기");
+		buttonsWrap.add(buttonWrite);
 		
 		
 		JPanel tableSearchArea = new JPanel();
@@ -126,14 +138,72 @@ public class PostList extends JFrame{
 		PrimaryButton buttonSearch = new PrimaryButton("검색");
 		tableSearchArea.add(buttonSearch);
 		//E: tableBottomArea
-		
+
+		//S: Search Table
+		buttonSearch.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				rowData.clear();
+				String searchTxt = searchInput.input.getText();
+				ArrayList<PostResponseDTO> searchResult = PostDAO.searchPostByTitleNickname(searchTxt);
+				//System.out.println(searchResult);
+				searchResult.forEach(
+						dto ->{
+							Vector<String> row = new Vector<>();
+							row.add(dto.getPostId()+"");
+							row.add(dto.getPostTitle());
+							row.add(dto.getNickname());
+							row.add(dateFormat.format(dto.getPostRegTime()));
+							rowData.add(row);
+						}
+				);
+				table.updateUI();
+				searchInput.input.setText("");
+			}
+		});
+		//E: Search Table
+		//S: table click PostRead
+		table.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int idx = table.getSelectedRow();
+				Vector<String> row= rowData.get(idx);
+				int postId = Integer.parseInt(row.getFirst());
+				PostResponseDTO postDTO = PostDAO.getPostReadDTO(postId);
+				new PostRead(postDTO);
+				dispose();
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+
+			@Override
+			public void mouseExited(MouseEvent e) {}
+		});
+		//E: table click PostRead
+		//S: Post Add
+		buttonWrite.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(SessionManager.getCurrentUser() != null){
+					new CreatePost(PostList.this);
+				}else{
+					JOptionPane.showMessageDialog(null, "로그인을 먼저 해주세요.");
+				}
+			}
+		});
+		//E: Post Add
 		//S: JFrame Setting
 		setSize(1440, 800);
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		//E: JFrame Setting
-	}
-	public static void main(String[] args) {
-		new PostList();
 	}
 }
