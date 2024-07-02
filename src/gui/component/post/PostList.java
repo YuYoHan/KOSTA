@@ -5,20 +5,18 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.ScrollPaneConstants;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import config.SessionManager;
 import dao.PostDAO;
 import dto.PostResponseDTO;
 import gui.component.global.CustomStyle;
@@ -36,10 +34,11 @@ public class PostList extends JFrame{
 	private Vector<Vector<String>> rowData = new Vector<>();
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-	PostList(){
+	public PostList(){
 		//S:header
 		Header header = new Header(this);
-		header.getButtonLogout().setVisible(false);
+		header.getButtonLogin().setVisible(false);
+		header.getButtonLogout().setVisible(true);
 		header.getButtonSignUp().setVisible(false);
 		header.getButtonPostList().setIsCurrent(true);
 		add(header, BorderLayout.NORTH);
@@ -126,8 +125,8 @@ public class PostList extends JFrame{
 		buttonsWrap.setLayout(new FlowLayout());
 		tableNavArea.add(buttonsWrap, BorderLayout.EAST);
 		buttonsWrap.setBackground(CustomStyle.white);
-		DefaultButton ButtonWrite = new DefaultButton("글쓰기");
-		buttonsWrap.add(ButtonWrite);
+		DefaultButton buttonWrite = new DefaultButton("글쓰기");
+		buttonsWrap.add(buttonWrite);
 		
 		
 		JPanel tableSearchArea = new JPanel();
@@ -164,14 +163,47 @@ public class PostList extends JFrame{
 			}
 		});
 		//E: Search Table
+		//S: table click PostRead
+		table.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int idx = table.getSelectedRow();
+				Vector<String> row= rowData.get(idx);
+				int postId = Integer.parseInt(row.getFirst());
+				PostResponseDTO postDTO = PostDAO.getPostReadDTO(postId);
+				new PostRead(postDTO);
+				dispose();
+			}
 
+			@Override
+			public void mousePressed(MouseEvent e) {}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+
+			@Override
+			public void mouseExited(MouseEvent e) {}
+		});
+		//E: table click PostRead
+		//S: Post Add
+		buttonWrite.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(SessionManager.getCurrentUser() != null){
+					new CreatePost(PostList.this);
+				}else{
+					JOptionPane.showMessageDialog(null, "로그인을 먼저 해주세요.");
+				}
+			}
+		});
+		//E: Post Add
 		//S: JFrame Setting
 		setSize(1440, 800);
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		//E: JFrame Setting
-	}
-	public static void main(String[] args) {
-		new PostList();
 	}
 }

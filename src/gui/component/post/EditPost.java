@@ -1,15 +1,11 @@
 package gui.component.post;
 
-import config.SessionManager;
 import dao.PostDAO;
 import dto.PostResponseDTO;
-import gui.Index;
-import gui.component.global.CustomStyle;
 import gui.component.buttons.DefaultButton;
 import gui.component.buttons.PrimaryButton;
+import gui.component.global.CustomStyle;
 import gui.component.global.Header;
-import gui.component.global.HintTextArea;
-import gui.component.global.HintTextField;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,13 +16,20 @@ import java.awt.event.ComponentEvent;
 
 
 // 게시글 생성 클래스
-public class CreatePost extends JFrame {
-    private HintTextField titleField;
-    private HintTextArea contentField;
+public class EditPost extends JFrame {
+    private JTextField titleField;
+    private JTextArea contentField;
+    private PostResponseDTO postDTO;
 
+    public PostResponseDTO getPostDTO() {
+        return postDTO;
+    }
 
+    public void setPostDTO(PostResponseDTO postDTO) {
+        this.postDTO = postDTO;
+    }
 
-    public CreatePost(JFrame mainPage) {
+    public EditPost(JFrame mainPage) {
         Header header = new Header(this);
         header.getButtonLogin().setVisible(false);
         header.getButtonSignUp().setVisible(false);
@@ -62,7 +65,7 @@ public class CreatePost extends JFrame {
 
 
         // 제목, 내용 필드 추가
-        titleField = new HintTextField("제목을 입력하세요");
+        titleField = new JTextField();
         titleField.setHorizontalAlignment(JTextField.LEFT);
         titleField.setBorder(BorderFactory.createMatteBorder(0,0,2,0, Color.GRAY)
         );
@@ -70,7 +73,7 @@ public class CreatePost extends JFrame {
         panel.add(titleField);
 
 
-        contentField = new HintTextArea("내용을 입력하세요");
+        contentField = new JTextArea();
         contentField.setBorder(BorderFactory.createMatteBorder(0,0,0,0, Color.GRAY)
         );
 
@@ -82,7 +85,7 @@ public class CreatePost extends JFrame {
         contentField.setWrapStyleWord(true);
 
         // 등록, 취소 버튼 추가
-        JButton addButton = new PrimaryButton("등록");
+        JButton addButton = new PrimaryButton("수정");
         JButton cancelButton = new DefaultButton("취소");
 
         // 버튼 크기 설정
@@ -109,18 +112,16 @@ public class CreatePost extends JFrame {
             }
         });
 
-        //포스터 등록 버튼
+        //포스터 수정 버튼
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(SessionManager.getCurrentUser());
-                PostResponseDTO postResponseDTO = new PostResponseDTO();
-                postResponseDTO.setPostTitle(titleField.getText());
-                postResponseDTO.setPostContents(contentField.getText());
-                postResponseDTO.setNickname(SessionManager.getCurrentUser());
-                PostDAO.postWrite(postResponseDTO);
+                PostDAO.postUpdate(postDTO.getPostId(), titleField.getText(), contentField.getText());
                 dispose();
-                new PostList();
+                postDTO.setPostTitle(titleField.getText());
+                postDTO.setPostContents(contentField.getText());
+                new PostRead(postDTO);
+                mainPage.dispose();
             }
         });
 
@@ -133,10 +134,10 @@ public class CreatePost extends JFrame {
             }
         });
     }
-    public HintTextField getTitleField(){
+    public JTextField getTitleField(){
         return titleField;
     }
-    public HintTextArea getContentField(){
+    public JTextArea getContentField(){
         return contentField;
     }
 
@@ -148,5 +149,3 @@ public class CreatePost extends JFrame {
         this.titleField.setText(titleTxt);
     }
 }
-
-

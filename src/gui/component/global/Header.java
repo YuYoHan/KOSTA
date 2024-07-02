@@ -15,6 +15,7 @@ import config.SessionManager;
 import gui.Index;
 import gui.component.buttons.DefaultButton;
 import gui.component.buttons.TextButton;
+import gui.component.post.PostList;
 import gui.component.user.Login;
 import gui.component.user.SignUp;
 import gui.component.user.UserInfo;
@@ -102,6 +103,15 @@ public class Header extends JPanel{
 		nav.add(buttonLogin);
 		nav.add(buttonLogout);
 		nav.add(buttonSignUp);
+
+		//방명록 눌렀을 때, 방명록 화면 나오게
+		buttonPostList.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new PostList();
+				page.dispose();
+			}
+		});
 	}
 
 
@@ -124,6 +134,8 @@ public class Header extends JPanel{
 		return buttonSignUp;
 	}
 
+
+	//현재 페이지 표시
 	public class NavButton extends TextButton{
 		boolean isCurrent = false;
 		boolean isVisible = true;
