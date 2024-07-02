@@ -11,7 +11,7 @@
 | Back-end | Back-end | Back-end | Back-end |
 
 ## 협업 툴
-[노션](https://www.notion.so/1-004272eefa9a49d499d5123b0dcc850b)
+[노션](https://recondite-broom-8c2.notion.site/1-004272eefa9a49d499d5123b0dcc850b?pvs=4)
 [피그마](https://www.figma.com/design/On9nZFxlr9LA1npykgkQks/Figma-basics?node-id=1669-162202)
 
 ## 화면 영상
