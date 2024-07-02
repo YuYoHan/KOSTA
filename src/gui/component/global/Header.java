@@ -54,7 +54,10 @@ public class Header extends JPanel{
 				logo.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			}
 			@Override
-			public void mouseClicked(MouseEvent e) {}
+			public void mouseClicked(MouseEvent e) {
+				new Index();
+				page.setVisible(false);
+			}
 		});
 		//E:logo
 		//S:nav
